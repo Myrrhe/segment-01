@@ -69,13 +69,41 @@ target_link_libraries(${EXECUTABLE_NAME} PRIVATE
     pthread
 )
 
-# Copier le dossier assets après la compilation
-add_custom_command(TARGET ${EXECUTABLE_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E remove_directory "$<TARGET_FILE_DIR:${EXECUTABLE_NAME}>/assets"
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_CURRENT_SOURCE_DIR}/assets"
+set(SRC_ASSETS "${CMAKE_CURRENT_SOURCE_DIR}/assets")
+set(DEST_ASSETS "$<TARGET_FILE_DIR:${EXECUTABLE_NAME}>/assets")
+
+# Test source
+if(EXISTS "${SRC_ASSETS}" AND IS_DIRECTORY "${SRC_ASSETS}")
+    set(SOURCE_EXISTS TRUE)
+else()
+    set(SOURCE_EXISTS FALSE)
+endif()
+
+# Test destination (note: generator expression évaluée plus tard, donc limité)
+if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/assets")  # Approximation
+    set(DEST_EXISTS TRUE)
+else()
+    set(DEST_EXISTS FALSE)
+endif()
+
+if(DEST_EXISTS)
+    add_custom_command(TARGET ${EXECUTABLE_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E remove_directory "$<TARGET_FILE_DIR:${EXECUTABLE_NAME}>/assets"
+    )
+endif()
+
+if(SOURCE_EXISTS)
+    add_custom_command(TARGET ${EXECUTABLE_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_CURRENT_SOURCE_DIR}/assets"
+            "$<TARGET_FILE_DIR:${EXECUTABLE_NAME}>/assets"
+    )
+else()
+    add_custom_command(TARGET ${EXECUTABLE_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory
         "$<TARGET_FILE_DIR:${EXECUTABLE_NAME}>/assets"
-)
+    )
+endif()
 
 # Inclure le sous-projet GAME (FetchContent)
 include(FetchContent)
