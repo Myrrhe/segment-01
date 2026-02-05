@@ -56,11 +56,22 @@ jobs:
         uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v6
 
       # 6
-      - name: Configure CMake (MingGW)
+      #- name: Configure CMake (MingGW)
+      #  shell: msys2 {0}
+      #  run: |
+      #    export PATH="/mingw64/bin:$PATH" which cmake || { echo "cmake not found"; exit 1; } cmake -S . -B build \
+      #      -G "MinGW Makefiles" \
+      #      -DCMAKE_BUILD_TYPE=Release
+
+      # 6b
+      - name: Configure (MinGW / CMake)
+        if: runner.os == 'Windows'
+        shell: bash
+        env:
+          SFML_INSTALL_DIR: 'C:/Program Files (x86)/SFML'
+          BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
         run: |
-          export PATH="/mingw64/bin:$PATH"
-          which cmake || { echo "cmake not found"; exit 1; }
-          cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
+          export PATH="/mingw64/bin:$PATH" which cmake || { echo "cmake not found"; exit 1; } cmake -S . -B build -G "MinGW Makefiles" -DSFML_DIR="$SFML_INSTALL_DIR" -DBUILD_WRAPPER_OUT_DIR="$BUILD_WRAPPER_OUT_DIR" -DCMAKE_BUILD_TYPE=Release
 
       # 7
       #- name: Install MinGW
