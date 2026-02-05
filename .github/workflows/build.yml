@@ -54,15 +54,35 @@ jobs:
       # 5
       - name: Install Build Wrapper
         uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v6
+
       # 6
       - name: Configure CMake (MingGW)
         shell: msys2 {0}
         run: |
-          cmake -S . -B build \
-            -G "MinGW Makefiles" \
+          export PATH="/mingw64/bin:$PATH" which cmake || { echo "cmake not found"; exit 1; } cmake -S . -B build
+            -G "MinGW Makefiles"
             -DCMAKE_BUILD_TYPE=Release
+
+      # 7
+      #- name: Install MinGW
+      #  uses: msys2/setup-msys2@v2
+      #  with:
+      #    update: true
+      #    install: >-
+      #      mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-cmake
+
+
+      # 6
+      #- name: Configure CMake (MingGW)
+      #  shell: msys2 {0}
+      #  run: |
+      #    cmake -S . -B build \
+      #      -G "MinGW Makefiles" \
+      #      -DCMAKE_BUILD_TYPE=Release
+
       # 7
       - name: Run Build Wrapper
+        shell: msys2 {0}
         run: |
           build-wrapper-win-x86-64.exe --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build --config Release
       # 8
