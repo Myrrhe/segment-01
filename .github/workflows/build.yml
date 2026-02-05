@@ -15,13 +15,14 @@ jobs:
     steps:
       # 1
       - name: Checkout repository
-        uses: actions/checkout@48bd46b7e298c849856f4c5b92c80d684bab802f  # v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       # 2
       - name: Cache SFML
         id: cache-sfml
-        uses: actions/cache@b08ff587957b579b5a55d21fd28f63d7e10b9410  # v3
+        uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c  # v3
+        # uses: actions/cache@b08ff587957b579b5a55d21fd28f63d7e10b9410  # v3
         with:
           path: C:/Program Files (x86)/SFML
           key: SFML-3.0.2-${{ runner.os }}-v1
@@ -29,7 +30,8 @@ jobs:
             SFML-3.0.2-${{ runner.os }}-
       # 3
       - name: Install MinGW
-        uses: msys2/setup-msys2@d6aa6b43aba0a6cb7ef79d11b4653af679d58d9d  # v2
+        uses: msys2/setup-msys2@4f806de0a5a7294ffabaff804b38a9b435a73bda  # v2
+        # uses: msys2/setup-msys2@d6aa6b43aba0a6cb7ef79d11b4653af679d58d9d  # v2
         with:
           update: true
           install: >-
@@ -72,6 +74,7 @@ jobs:
       - name: Install Build Wrapper
         id: install_wrapper
         uses: SonarSource/sonarqube-scan-action/install-build-wrapper@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
+        # uses: SonarSource/sonarqube-scan-action/install-build-wrapper@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
       # 7
       - name: Run Build Wrapper (Windows PowerShell)
         shell: pwsh
@@ -90,6 +93,7 @@ jobs:
       # 8
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
+        # uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
