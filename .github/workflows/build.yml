@@ -20,6 +20,7 @@ jobs:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       # 2
       - name: Cache SFML
+        id: cache-sfml
         uses: actions/cache@v3
         with:
           path: C:/Program Files (x86)/SFML
@@ -53,14 +54,6 @@ jobs:
               exit 1
             }
           "
-      # 6
-      #- name: Configure CMake (MingGW)
-      #  shell: msys2 {0}
-      #  run: |
-      #    export PATH="/mingw64/bin:$PATH" which cmake || { echo "cmake not found"; exit 1; } cmake -S . -B build \
-      #      -G "MinGW Makefiles" \
-      #      -DCMAKE_BUILD_TYPE=Release
-
       # 5
       - name: Configure (MinGW / CMake)
         if: runner.os == 'Windows'
@@ -75,35 +68,10 @@ jobs:
             exit 1
           fi
           cmake -S . -B build -G "MinGW Makefiles" -DSFML_DIR="$SFML_INSTALL_DIR" -DBUILD_WRAPPER_OUT_DIR="$BUILD_WRAPPER_OUT_DIR" -DCMAKE_BUILD_TYPE=Release
-
-      # 7
-      #- name: Install MinGW
-      #  uses: msys2/setup-msys2@v2
-      #  with:
-      #    update: true
-      #    install: >-
-      #      mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-cmake
-
-
-      # 6
-      #- name: Configure CMake (MingGW)
-      #  shell: msys2 {0}
-      #  run: |
-      #    cmake -S . -B build \
-      #      -G "MinGW Makefiles" \
-      #      -DCMAKE_BUILD_TYPE=Release
-
       # 6
       - name: Install Build Wrapper
         id: install_wrapper
         uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v6
-
-      # 7
-      #- name: Run Build Wrapper
-      #  shell: msys2 {0}
-      #  run: |
-      #    build-wrapper-win-x86-64.exe --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build --config Release
-
       # 7
       - name: Run Build Wrapper (Windows PowerShell)
         shell: pwsh
