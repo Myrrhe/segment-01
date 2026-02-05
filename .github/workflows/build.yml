@@ -31,12 +31,11 @@ jobs:
         if: steps.cache-sfml.outputs.cache-hit != 'true'
         env:
           SFML_TOKEN: ${{ secrets.SFML_TOKEN }}
+        shell: bash
         run: |
-          mkdir "C:/Program Files (x86)/SFML"
-          curl -L -H "Authorization: token $SFML_TOKEN" \
-            -o sfml.zip \
-            https://github.com/Myrrhe/sfml-myrrhe/blob/main/sfml.zip
-          tar -xf sfml.zip -C "C:/Program Files (x86)/SFML"
+          mkdir -p "/c/Program Files (x86)/SFML"
+          curl -L -H "Authorization: token $SFML_TOKEN" -o sfml.zip https://github.com/Myrrhe/sfml-myrrhe/blob/main/sfml.zip
+          tar -xf sfml.zip -C "/c/Program Files (x86)/SFML"
       # 4
       - name: Install Build Wrapper
         uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v6
