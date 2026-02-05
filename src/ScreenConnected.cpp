@@ -22,7 +22,12 @@
 namespace segment01
 {
 
-ScreenConnected::ScreenConnected() : name(), bounds(), refreshRate(0), dpi() {}
+ScreenConnected::ScreenConnected()
+    : name(L""), bounds(sf::Rect<float32_t>(sf::Vector2<float32_t>(0, 0),
+                                            sf::Vector2<float32_t>(0, 0))),
+      refreshRate(0), dpi(sf::Vector2<uint32_t>(0, 0))
+{
+}
 
 ScreenConnected::ScreenConnected(const std::wstring &newName,
                                  const sf::Rect<float32_t> &newBounds,

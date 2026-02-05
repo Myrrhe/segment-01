@@ -21,8 +21,8 @@
 
 namespace segment01
 {
-Logger::Logger() : m_mtx(), m_output(std::cout) {}
-Logger::Logger(std::ostream& out) : m_mtx(), m_output(out) {}
+Logger::Logger() : m_mtx(std::mutex()), m_output(std::cout) {}
+Logger::Logger(std::ostream& out) : m_mtx(std::mutex()), m_output(out) {}
 
 std::string Logger::getCurrentTime() const
 {
