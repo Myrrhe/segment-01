@@ -34,7 +34,15 @@ jobs:
         run: |
           mkdir "C:/Program Files (x86)/SFML"
           curl -L -H "Authorization: token $SFML_TOKEN" -o sfml.zip https://github.com/Myrrhe/sfml-myrrhe/raw/main/sfml.zip
-          powershell -Command "Expand-Archive -LiteralPath sfml.zip -DestinationPath 'C:/Program Files (x86)/SFML' -Force"
+          powershell -Command "
+            if (-not (Test-Path 'sfml.zip')) { throw 'sfml.zip not downloaded' }
+            try {
+              Expand-Archive -LiteralPath sfml.zip -DestinationPath 'C:/Program Files (x86)/SFML' -Force
+            } catch {
+              Write-Error 'SFML archive is invalid or corrupted.'
+              exit 1
+            }
+          "
       # 4
       - name: Install Build Wrapper
         uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v6
