@@ -24,17 +24,33 @@ namespace segment01
 
 uint64_t Input::joystickSensitivity;
 
+// Input::Input()
+//     : typeInput(), key(), button(), axis(), buttonJoystick(), idJoystick(),
+//       signAxis()
+// {
+// }
+
+// Input::Input()
+//     : typeInput{TypeInput::KEYBOARD},
+//       key{sf::Keyboard::Key::Unknown},
+//       button{sf::Mouse::Button::Left},
+//       axis{sf::Joystick::Axis::X},
+//       buttonJoystick{0},
+//       idJoystick{0},
+//       signAxis{false}
+// {
+// }
+
 Input::Input()
-    : typeInput(), key(), button(), axis(), buttonJoystick(), idJoystick(),
-      signAxis()
+    : typeInput{},
+      key{},
+      button{},
+      axis{},
+      buttonJoystick{},
+      idJoystick{},
+      signAxis{}
 {
 }
-
-Input::Input(Input &&input) noexcept = default;
-
-Input& Input::operator=(Input &&input) noexcept = default;
-
-Input::~Input() = default;
 
 Input::Input(const sf::Keyboard::Key &newKey)
     : typeInput(TypeInput::KEYBOARD), key(newKey), button(), axis(),
@@ -58,12 +74,6 @@ Input::Input(const sf::Joystick::Axis &newAxis, const uint32_t newIdJoystick,
 Input::Input(const uint32_t newButtonJoystick, const uint32_t newIdJoystick)
     : typeInput(TypeInput::JOYSTICK), key(), button(), axis(),
       buttonJoystick(newButtonJoystick), idJoystick(newIdJoystick), signAxis()
-{
-}
-
-Input::Input(const Input &input) noexcept
-    : typeInput(input.typeInput), key(input.key), button(input.button), axis(),
-      buttonJoystick(input.buttonJoystick), idJoystick(), signAxis()
 {
 }
 
@@ -754,7 +764,19 @@ Input::Input(const std::string_view &str)
     }
 }
 
+Input::Input(const Input &input) noexcept
+    : typeInput(input.typeInput), key(input.key), button(input.button), axis(),
+      buttonJoystick(input.buttonJoystick), idJoystick(), signAxis()
+{
+}
+
 Input &Input::operator=(const Input &input) = default;
+
+Input::Input(Input &&input) noexcept = default;
+
+Input& Input::operator=(Input &&input) noexcept = default;
+
+Input::~Input() = default;
 
 std::string Input::toString() const
 {
