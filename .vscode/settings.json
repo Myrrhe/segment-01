@@ -91,5 +91,9 @@
         "xhash": "cpp",
         "filesystem": "cpp",
         "unordered_set": "cpp"
+    },
+    "sonarlint.connectedMode.project": {
+        "connectionId": "myrrhe-1",
+        "projectKey": "Myrrhe_segment-01"
     }
 }
