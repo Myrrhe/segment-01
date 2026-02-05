@@ -57,11 +57,10 @@ jobs:
 
       # 6
       - name: Configure CMake (MingGW)
-        shell: msys2 {0}
         run: |
-          export PATH="/mingw64/bin:$PATH" which cmake || { echo "cmake not found"; exit 1; } cmake -S . -B build \
-            -G "MinGW Makefiles" \
-            -DCMAKE_BUILD_TYPE=Release
+          export PATH="/mingw64/bin:$PATH"
+          which cmake || { echo "cmake not found"; exit 1; }
+          cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
 
       # 7
       #- name: Install MinGW
