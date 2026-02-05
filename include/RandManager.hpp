@@ -42,8 +42,7 @@ public:
     [[nodiscard]] [[gnu::const]] static uint64_t getMax();
 
 private:
-    static std::array<
-        static std::array<std::mt19937, 1> mt;
+    static std::array<std::mt19937, 1> mt;
 
     static uint_fast32_t mainSeed;
 };
