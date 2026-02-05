@@ -17,32 +17,35 @@
  *
  */
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wlong-long"
-
 #include "Mt19937_64.hpp"
 
-namespace segment01 {
-
-Mt19937_64::Mt19937_64() : mt(), index(0) {}
-
-Mt19937_64::Mt19937_64(const uint64_t seed) : mt(), index(0)
+namespace segment01
 {
-    mt[0] = seed;
-    for (std::size_t i = 1; i < n; i++) {
-        mt[i] = 6364136223846793005ULL * (mt[i-1] ^ (mt[i-1] >> 62)) + i;
-    }
-    index = n;
-}
+
+Mt19937_64::Mt19937_64(const uint64_t s) : mt(), index(0) { seed(s); }
 
 Mt19937_64::Mt19937_64(const Mt19937_64 &right) = default;
 Mt19937_64 &Mt19937_64::operator=(const Mt19937_64 &right) = default;
 Mt19937_64::Mt19937_64(Mt19937_64 &&right) noexcept = default;
-Mt19937_64& Mt19937_64::operator=(Mt19937_64 &&right) noexcept = default;
+Mt19937_64 &Mt19937_64::operator=(Mt19937_64 &&right) noexcept = default;
 Mt19937_64::~Mt19937_64() = default;
 
-uint64_t Mt19937_64::operator()() {
-    if (index >= n) twist();
+void Mt19937_64::seed(const uint64_t s)
+{
+    mt[0] = s;
+    for (size_t i = 1; i < n; ++i)
+    {
+        mt[i] = 6364136223846793005ULL * (mt[i - 1] ^ (mt[i - 1] >> 62)) + i;
+    }
+    index = n;
+}
+
+uint64_t Mt19937_64::operator()()
+{
+    if (index >= n)
+    {
+        twist();
+    }
     index++;
     uint64_t x = mt[index];
     // Tempering
@@ -53,6 +56,19 @@ uint64_t Mt19937_64::operator()() {
     return x;
 }
 
-} // namespace segment01
+void Mt19937_64::twist()
+{
+    for (std::size_t i = 0; i < n; i++)
+    {
+        uint64_t x = (mt[i] & upper_mask) + (mt[(i + 1) % n] & lower_mask);
+        uint64_t xA = x >> 1;
+        if (x % 2 != 0)
+        {
+            xA ^= matrix_a;
+        }
+        mt[i] = mt[(i + m) % n] ^ xA;
+    }
+    index = 0;
+}
 
-#pragma GCC diagnostic pop
+} // namespace segment01

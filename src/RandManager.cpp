@@ -28,12 +28,13 @@
 namespace segment01
 {
 
-std::array<std::mersenne_twister_engine<uint_fast32_t, 32UL, 624UL, 397UL, 31UL,
-                                        0x99'08'b0'dfU, 11UL, 0xff'ff'ff'ffU,
-                                        7UL, 0x9d'2c'56'80U, 15UL,
-                                        0xef'c6'00'00U, 18UL, 1'812'433'253U>,
-           1UL>
-    RandManager::mt;
+// std::array<std::mersenne_twister_engine<uint_fast32_t, 32UL, 624UL, 397UL, 31UL,
+//                                         0x99'08'b0'dfU, 11UL, 0xff'ff'ff'ffU,
+//                                         7UL, 0x9d'2c'56'80U, 15UL,
+//                                         0xef'c6'00'00U, 18UL, 1'812'433'253U>,
+//            1UL>
+//     RandManager::mt;
+std::array<Mt19937_64, 1UL> RandManager::mt;
 
 uint_fast32_t RandManager::mainSeed;
 
@@ -58,7 +59,8 @@ uint64_t RandManager::getRand(const std::size_t index) { return mt[index](); }
 
 uint64_t RandManager::getMax()
 {
-    return decltype(mt)::value_type::max();
+    // return decltype(mt)::value_type::max();
+    return Mt19937_64::max();
 }
 
 } // namespace segment01

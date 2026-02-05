@@ -33,31 +33,26 @@ public:
     static constexpr uint64_t upper_mask = 0xFFFFFFFF80000000ULL;
     static constexpr uint64_t lower_mask = 0x7FFFFFFFULL;
 
-    Mt19937_64();
-    explicit Mt19937_64(const uint64_t seed = 5489ULL);
+    explicit Mt19937_64(const uint64_t s = 5489ULL);
     Mt19937_64(const Mt19937_64 &right);
     Mt19937_64 &operator=(const Mt19937_64 &right);
     Mt19937_64(Mt19937_64 &&right) noexcept;
     Mt19937_64& operator=(Mt19937_64 &&right) noexcept;
     ~Mt19937_64();
 
+    void seed(const uint64_t s);
+
     uint64_t operator()();
+
+    static constexpr uint64_t max() {
+        return UINT64_MAX;
+    }
 
 private:
     std::array<uint64_t, n> mt;
     std::size_t index;
 
-    void twist() {
-        for (std::size_t i = 0; i < n; i++) {
-            uint64_t x = (mt[i] & upper_mask) + (mt[(i+1) % n] & lower_mask);
-            uint64_t xA = x >> 1;
-            if (x % 2 != 0) {
-                xA ^= matrix_a;
-            }
-            mt[i] = mt[(i + m) % n] ^ xA;
-        }
-        index = 0;
-    }
+    void twist();
 };
 
 } // namespace segment01

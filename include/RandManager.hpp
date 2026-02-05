@@ -19,6 +19,7 @@
 
 #ifndef RANDMANAGER_HPP
 #define RANDMANAGER_HPP
+#include "Mt19937_64.hpp"
 #include "StaticObject.hpp"
 #include <array>
 #include <cstdint>
@@ -42,13 +43,14 @@ public:
     [[nodiscard]] [[gnu::const]] static uint64_t getMax();
 
 private:
-    static std::array<
-        std::mersenne_twister_engine<uint_fast32_t, 32UL, 624UL, 397UL, 31UL,
-                                     0x99'08'b0'dfU, 11UL, 0xff'ff'ff'ffU, 7UL,
-                                     0x9d'2c'56'80U, 15UL, 0xef'c6'00'00U, 18UL,
-                                     1'812'433'253U>,
-        1UL>
-        mt;
+    // static std::array<
+    //     std::mersenne_twister_engine<uint_fast32_t, 32UL, 624UL, 397UL, 31UL,
+    //                                  0x99'08'b0'dfU, 11UL, 0xff'ff'ff'ffU, 7UL,
+    //                                  0x9d'2c'56'80U, 15UL, 0xef'c6'00'00U, 18UL,
+    //                                  1'812'433'253U>,
+    //     1UL>
+    //     mt;
+    static std::array<Mt19937_64, 1UL> mt;
 
     static uint_fast32_t mainSeed;
 };
