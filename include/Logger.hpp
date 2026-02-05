@@ -75,7 +75,7 @@ public:
     }
 
 private:
-    std::mutex m_mtx;
+    std::mutex m_mtx = std::mutex();
     std::ostream &m_output;
 
     std::string getCurrentTime() const;
