@@ -27,6 +27,14 @@ jobs:
           restore-keys: |
             SFML-3.0.2-${{ runner.os }}-
       # 3
+      - name: Install MinGW
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-make
+      # 4
       - name: Install SFML
         if: steps.cache-sfml.outputs.cache-hit != 'true'
         env:
@@ -43,18 +51,21 @@ jobs:
               exit 1
             }
           "
-      # 4
+      # 5
       - name: Install Build Wrapper
         uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v6
-      # 5
-      - name: Configure CMake
-        run: |
-          cmake -S . -B build
       # 6
+      - name: Configure CMake (MingGW)
+        shell: msys2 {0}
+        run: |
+          cmake -S . -B build \
+            -G "MinGW Makefiles" \
+            -DCMAKE_BUILD_TYPE=Release
+      # 7
       - name: Run Build Wrapper
         run: |
           build-wrapper-win-x86-64.exe --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build --config Release
-      # 7
+      # 8
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
