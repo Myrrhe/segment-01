@@ -1,11 +1,11 @@
-// #include "Engine.hpp"
+#include "Logger.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <windows.h>
 
 int main(int /*argc*/, char ** /*argv*/, char ** /*options*/)
 {
-    std::cout << "aaa" << '\n';
+    segment01::Logger().info("aaa");
 #ifdef _DEBUG
     std::cout << "Mode Debug, logs visibles dans la console\n";
 #else
