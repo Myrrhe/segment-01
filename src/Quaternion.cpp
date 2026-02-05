@@ -43,6 +43,10 @@ Quaternion::~Quaternion() = default;
 
 Quaternion &Quaternion::operator=(const Quaternion &right) = default;
 
+Quaternion::Quaternion(Quaternion &&right) noexcept = default;
+
+Quaternion& Quaternion::operator=(Quaternion &&right) noexcept = default;
+
 /*
 std::partial_ordering Quaternion::operator<=>(const Quaternion& right) const
 {

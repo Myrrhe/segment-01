@@ -38,6 +38,8 @@ public:
     Quaternion(const Quaternion &newXYZT);
     ~Quaternion();
     Quaternion &operator=(const Quaternion &right);
+    Quaternion(Quaternion &&right) noexcept;
+    Quaternion& operator=(Quaternion &&right) noexcept;
     // std::partial_ordering operator<=>(const Quaternion& right) const;
     [[gnu::const]] const float64_t &operator[](const std::size_t i) const;
     float64_t &operator[](const std::size_t i);

@@ -37,6 +37,8 @@ public:
     ScreenConnected(const ScreenConnected &right);
     ~ScreenConnected();
     ScreenConnected &operator=(const ScreenConnected &right);
+    ScreenConnected(ScreenConnected &&right) noexcept;
+    ScreenConnected& operator=(ScreenConnected &&right) noexcept;
 
     static void initialize();
     static void deleteAll();

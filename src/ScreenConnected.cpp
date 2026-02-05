@@ -44,6 +44,10 @@ ScreenConnected::~ScreenConnected() = default;
 ScreenConnected &
 ScreenConnected::operator=(const ScreenConnected &right) = default;
 
+ScreenConnected::ScreenConnected(ScreenConnected &&right) noexcept = default;
+ScreenConnected &
+ScreenConnected::operator=(ScreenConnected &&right) noexcept = default;
+
 void ScreenConnected::initialize()
 {
     // Nothing to do
