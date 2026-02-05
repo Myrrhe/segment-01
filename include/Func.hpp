@@ -74,12 +74,12 @@ public:
 
     static sf::Image hBITMAPToImage(const HBITMAP hBitmap);
 
-    [[nodiscard]] static sf::Color colorBalance(const sf::Color &lhs,
-                                                const sf::Color &rhs,
-                                                const float64_t coeff);
+    [[nodiscard]] [[gnu::pure]] static sf::Color
+    colorBalance(const sf::Color &lhs, const sf::Color &rhs,
+                 const float64_t coeff);
 
-    [[nodiscard]] static float64_t colorDistanceSquared(const sf::Color &lhs,
-                                                        const sf::Color &rhs);
+    [[nodiscard]] [[gnu::pure]] static float64_t
+    colorDistanceSquared(const sf::Color &lhs, const sf::Color &rhs);
 
     static std::vector<std::string> getDir(const std::string &dir);
 
@@ -89,9 +89,9 @@ public:
 
     static std::u32string getKeyWordLine(const std::u32string_view &line);
 
-    static bool hasSuffixInList(const std::string_view &str,
-                                const std::string *const begin,
-                                const std::string *const end);
+    [[gnu::pure]] static bool hasSuffixInList(const std::string_view &str,
+                                              const std::string *const begin,
+                                              const std::string *const end);
 };
 
 } // namespace segment01

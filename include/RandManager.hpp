@@ -37,9 +37,9 @@ public:
 
     static void setMain(const std::size_t index, const bool giveNewSeed,
                         const uint_fast32_t newMainSeed);
-    [[nodiscard]] static uint_fast32_t getMainSeed();
+    [[nodiscard]] [[gnu::pure]] static uint_fast32_t getMainSeed();
     [[nodiscard]] static uint64_t getRand(const std::size_t index);
-    [[nodiscard]] static uint64_t getMax();
+    [[nodiscard]] [[gnu::const]] static uint64_t getMax();
 
 private:
     static std::array<

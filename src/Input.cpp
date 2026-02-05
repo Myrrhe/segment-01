@@ -30,6 +30,10 @@ Input::Input()
 {
 }
 
+Input::Input(Input &&input) noexcept = default;
+
+Input& Input::operator=(Input &&input) noexcept = default;
+
 Input::~Input() = default;
 
 Input::Input(const sf::Keyboard::Key &newKey)

@@ -30,7 +30,7 @@ class MouseWheel final : public StaticObject
 public:
     static void initialize();
 
-    [[nodiscard]] static float32_t getDeltaWheel();
+    [[nodiscard]] [[gnu::pure]] static float32_t getDeltaWheel();
     static void setDeltaWheel(const float32_t newDeltaWheel);
 
 private:

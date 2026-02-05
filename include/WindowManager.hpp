@@ -60,18 +60,18 @@ public:
     static sf::Vector2<float32_t>
     mapPixelToCoords(const sf::Vector2<int32_t> &point);
 
-    [[nodiscard]] static sf::RenderWindow *getRenderWindow();
+    [[nodiscard]] [[gnu::pure]] static sf::RenderWindow *getRenderWindow();
 
-    [[nodiscard]] static bool isTextEntered();
-    [[nodiscard]] static char32_t getCharEntered();
+    [[nodiscard]] [[gnu::pure]] static bool isTextEntered();
+    [[nodiscard]] [[gnu::pure]] static char32_t getCharEntered();
 
-    [[nodiscard]] static bool isKeyPressed();
-    [[nodiscard]] static sf::Keyboard::Key getKeyPressed();
+    [[nodiscard]] [[gnu::pure]] static bool isKeyPressed();
+    [[nodiscard]] [[gnu::pure]] static sf::Keyboard::Key getKeyPressed();
 
-    [[nodiscard]] static bool isAltEntered();
-    [[nodiscard]] static bool isControlEntered();
-    [[nodiscard]] static bool isShiftEntered();
-    [[nodiscard]] static bool isSystemEntered();
+    [[nodiscard]] [[gnu::pure]] static bool isAltEntered();
+    [[nodiscard]] [[gnu::pure]] static bool isControlEntered();
+    [[nodiscard]] [[gnu::pure]] static bool isShiftEntered();
+    [[nodiscard]] [[gnu::pure]] static bool isSystemEntered();
 
     static constexpr uint64_t Width = 600;
     static constexpr uint64_t Height = 600;

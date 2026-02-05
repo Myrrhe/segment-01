@@ -64,19 +64,21 @@ public:
     explicit Input(const std::string_view &str);
     Input(const Input &input) noexcept;
     Input &operator=(const Input &input);
+    Input(Input &&input) noexcept;
+    Input& operator=(Input &&input) noexcept;
     ~Input();
     std::string toString() const;
     bool isPressed() const;
-    [[nodiscard]] TypeInput getTypeInput() const;
-    [[nodiscard]] sf::Keyboard::Key getKey() const;
-    [[nodiscard]] sf::Mouse::Button getButton() const;
-    [[nodiscard]] sf::Joystick::Axis getAxis() const;
-    [[nodiscard]] bool getSignAxis() const;
-    [[nodiscard]] uint32_t getButtonJoyStick() const;
-    [[nodiscard]] uint32_t getIdJoystick() const;
+    [[nodiscard]] [[gnu::pure]] TypeInput getTypeInput() const;
+    [[nodiscard]] [[gnu::pure]] sf::Keyboard::Key getKey() const;
+    [[nodiscard]] [[gnu::pure]] sf::Mouse::Button getButton() const;
+    [[nodiscard]] [[gnu::pure]] sf::Joystick::Axis getAxis() const;
+    [[nodiscard]] [[gnu::pure]] bool getSignAxis() const;
+    [[nodiscard]] [[gnu::pure]] uint32_t getButtonJoyStick() const;
+    [[nodiscard]] [[gnu::pure]] uint32_t getIdJoystick() const;
 
     static void initialize();
-    [[nodiscard]] static uint64_t getJoystickSensitivity();
+    [[nodiscard]] [[gnu::pure]] static uint64_t getJoystickSensitivity();
     static void setJoystickSensitivity(const uint64_t newJoystickSensitivity);
 
 private:
