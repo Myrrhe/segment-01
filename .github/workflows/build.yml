@@ -94,7 +94,7 @@ jobs:
         shell: bash
         run: |
           cd build
-          ctest --output-on-failure --build-config Debug -VV
+          ctest --output-on-failure --build-config Debug
       # 9
       - name: Generate coverage report
         shell: msys2 {0}
@@ -110,12 +110,13 @@ jobs:
           # lcov --remove coverage.info '*tests/*' --output-file coverage.info
           # vérifier
           lcov --list coverage.info
+          ls -a .
       # 10
       - name: Debug coverage files
         shell: bash
         run: |
           ls -lah build
-          head -n 20 build/coverage.info
+          head -n 200 build/coverage.info
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
         # uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
