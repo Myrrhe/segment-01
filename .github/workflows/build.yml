@@ -89,7 +89,12 @@ jobs:
           }
           Write-Host "Using build-wrapper at: $bwExe"
           & $bwExe --out-dir $env:BUILD_WRAPPER_OUT_DIR cmake --build build --config Release
-
+       # 7bis
+      - name: Run unit tests (CTest)
+        shell: bash
+        run: |
+          cd build
+          ctest --output-on-failure --build-config Release
       # 8
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
