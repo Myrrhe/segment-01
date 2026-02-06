@@ -127,11 +127,36 @@ jobs:
           ls -a .
           for f in ../../../../src/*.cpp; do
             echo "a $(basename "$f")"
-            gcov -o . "./$(basename "$f")"
+            
+            fname=$(basename "$f")
+            gcda="$fname.gcda"
+
+            if [ -f "$gcda" ]; then  # vérifie que le fichier .gcda existe
+              echo "Generating gcov for $fname"
+              gcov -o . "$fname"
+            else
+              echo "Skipping $fname: $gcda does not exist"
+            fi
+
+            # gcov -o . "./$(basename "$f")"
           done
-          for f in ../../../../include/*.hpp; do
-            echo "b $(basename "$f")"
-            gcov -o . "./$(basename "$f")"
+
+          # for f in ../../../../include/*.hpp; do
+          #   echo "b $(basename "$f")"
+          #   gcov -o . "./$(basename "$f")"
+          # done
+
+          for hdr in ../../../../include/*.hpp; do
+            fname=$(basename "$hdr")           # ex: FontManager.hpp
+            # Pour les headers, gcov recherche le .gcda correspondant dans le même répertoire que le .cpp
+            # On prend le même principe
+            gcda="${fname%.hpp}.cpp.gcda"      # si le header est inclus dans un cpp du même nom
+            if [ -f "$gcda" ]; then
+              echo "Generating gcov for header $fname"
+              gcov -o . "$hdr"
+            else
+              echo "Skipping header $fname: $gcda does not exist"
+            fi
           done
       # 10
       - name: Debug coverage files
