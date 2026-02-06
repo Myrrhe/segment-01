@@ -133,7 +133,7 @@ jobs:
 
             if [ -f "$gcda" ]; then  # vérifie que le fichier .gcda existe
               echo "Generating gcov for $fname"
-              gcov -o . "./$fname"
+              gcov "$fname"
             else
               echo "Skipping $fname: $gcda does not exist"
             fi
@@ -153,7 +153,7 @@ jobs:
             gcda="${fname%.hpp}.cpp.gcda"      # si le header est inclus dans un cpp du même nom
             if [ -f "$gcda" ]; then
               echo "Generating gcov for header $fname"
-              gcov -o . "./$hdr"
+              gcov -o . "$hdr"
             else
               echo "Skipping header $fname: $gcda does not exist"
             fi
