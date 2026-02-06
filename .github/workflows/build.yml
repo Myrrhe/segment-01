@@ -110,9 +110,13 @@ jobs:
           # capture coverage
           lcov --directory . --capture --output-file coverage.info
           # exclure les fichiers de test
-          cat coverage.info
-          lcov --remove coverage.info '*tests/*' --output-file coverage.info
+          # lcov --remove coverage.info '*tests/*' --output-file coverage.info
+          lcov --extract coverage.full.info \
+            "*/src/*" \
+            "*/include/*" \
+            --output-file coverage.info
           # vérifier
+          cat coverage.info
           lcov --list coverage.info
       # 10
       - name: Debug coverage files
