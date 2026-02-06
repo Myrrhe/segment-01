@@ -113,8 +113,8 @@ jobs:
           # lcov --remove coverage.info '*tests/*' --output-file coverage.info
   
           lcov --extract coverage.info \
-            "*src*" \
-            "*include*" \
+            "D:\\a\\segment-01\\segment-01\\src\\*" \
+            "D:\\a\\segment-01\\segment-01\\include\\*" \
             --output-file coverage.info
 
           # vérifier
