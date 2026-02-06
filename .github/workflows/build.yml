@@ -94,35 +94,32 @@ jobs:
         shell: bash
         run: |
           cd build
-          ctest --output-on-failure --build-config Debug
+          ctest --output-on-failure --build-config Debug -VV
       # 9
       - name: Generate coverage report
         shell: msys2 {0}
+        # env:
+        #   PATH: "/mingw64/bin:$PATH"
         run: |
+          # export PATH="/mingw64/bin:$PATH"
           cd build
           # reset counters
           lcov --directory . --zerocounters
           # relancer les tests
           ctest --output-on-failure --build-config Debug
           # capture coverage
-          lcov --directory . --capture --output-file coverage.full.info
+          lcov --directory . --capture --output-file coverage.info
           # exclure les fichiers de test
-          # lcov --remove coverage.info '*tests/*' --output-file coverage.full.info
-          lcov --extract coverage.full.info \
-            "*/src/*" \
-            "*/include/*" \
-            --output-file coverage.info
-          # vérifier
           cat coverage.info
+          lcov --remove coverage.info '*tests/*' --output-file coverage.info
+          # vérifier
           lcov --list coverage.info
-          # ls -a .
       # 10
       - name: Debug coverage files
         shell: bash
         run: |
           ls -lah build
-          # head -n 200 build/coverage.info
-          # cat build/coverage.info
+          head -n 20 build/coverage.info
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
         # uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
@@ -134,3 +131,32 @@ jobs:
             --define "sonar.cfamily.gcov.reportsPath=build"
 
 # Le point d'entrée de procédure _ZNSt15basic_streambuflcSt11char_traitslcEE7seekpostESt4fposlç_MbstatetESt13_los_Openmode est introuvable dans la bibliothèque de liens dynamiques C:\Users\Thomas BAUDIN\perso\projects\segment-01\build\bin\tests.exe
+
+# # 9
+#       - name: Generate coverage report
+#         shell: msys2 {0}
+#         run: |
+#           cd build
+#           # reset counters
+#           lcov --directory . --zerocounters
+#           # relancer les tests
+#           ctest --output-on-failure --build-config Debug
+#           # capture coverage
+#           lcov --directory . --capture --output-file coverage.full.info
+#           # exclure les fichiers de test
+#           # lcov --remove coverage.info '*tests/*' --output-file coverage.full.info
+#           lcov --extract coverage.full.info \
+#             "*/src/*" \
+#             "*/include/*" \
+#             --output-file coverage.info
+#           # vérifier
+#           cat coverage.info
+#           lcov --list coverage.info
+#           # ls -a .
+#       # 10
+#       - name: Debug coverage files
+#         shell: bash
+#         run: |
+#           ls -lah build
+#           # head -n 200 build/coverage.info
+#           # cat build/coverage.info
