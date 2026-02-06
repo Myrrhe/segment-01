@@ -11,12 +11,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Répertoire de sortie des exécutables
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# Récupération de tous les fichiers sources
-file(GLOB_RECURSE SOURCES
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp"
-)
-
 # Détection du type de build et nom de l'exécutable
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
     set(EXECUTABLE_NAME release)
@@ -24,34 +18,41 @@ else()
     set(EXECUTABLE_NAME debug)
 endif()
 
-# Création de l'exécutable
-add_executable(${EXECUTABLE_NAME} ${SOURCES})
+# Récupération de tous les fichiers sources
+file(GLOB_RECURSE SOURCES
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp"
+)
+
+list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
+
+add_library(segment01 STATIC ${SOURCES})
 
 # Inclusion des headers
-target_include_directories(${EXECUTABLE_NAME}
+target_include_directories(segment01
     PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
-target_include_directories(${EXECUTABLE_NAME}
-    SYSTEM PRIVATE "C:/Program Files (x86)/SFML/include"
+target_include_directories(segment01
+    SYSTEM PUBLIC "C:/Program Files (x86)/SFML/include"
 )
 
+target_compile_definitions(segment01 PUBLIC SFML_STATIC)
+
 # Lien avec les librairies SFML statiques et dépendances système
-target_link_directories(${EXECUTABLE_NAME}
+target_link_directories(segment01
     PUBLIC "C:/Program Files (x86)/SFML/lib"
 )
 
-target_compile_definitions(${EXECUTABLE_NAME} PRIVATE SFML_STATIC)
-
 # Options de compilation spécifiques selon le compilateur
 if (MSVC)
-    target_compile_options(${EXECUTABLE_NAME} PRIVATE /W4 /permissive-)
+    target_compile_options(segment01 PRIVATE /W4 /permissive-)
 else()
-    target_compile_options(${EXECUTABLE_NAME} PRIVATE -Wall -Wextra -Wpedantic -Weffc++ -Wundef -Wcast-align -Wwrite-strings -Wlogical-op -Wmissing-declarations -Wredundant-decls -Wshadow -Woverloaded-virtual -Wzero-as-null-pointer-constant -Wswitch-default -Wswitch-enum -Wmissing-include-dirs -Wunreachable-code -Winline -Winit-self -Wnon-virtual-dtor -pedantic -Wcast-qual -Wdisabled-optimization -Wdiv-by-zero -Wendif-labels -Wformat-extra-args -Wformat-nonliteral -Wformat-security -Wformat-y2k -Wimport -Winvalid-pch -Wmissing-braces -Wmultichar -Wpacked -Wpointer-arith -Wreturn-type -Wsequence-point -Wvariadic-macros -Wfloat-equal -Wstrict-aliasing=1 -Wstrict-overflow=5 -Wunsafe-loop-optimizations -Wnull-dereference -Wuninitialized -Wstringop-overflow=4 -Wstringop-truncation -Walloc-zero -Walloca -Wduplicated-branches -Wduplicated-cond -Wtrampolines -Wunused-macros -Wconditionally-supported -Wdate-time -Wvarargs -Wvector-operation-performance -Wopenmp-simd -Whsa -Wextra-semi -Warray-bounds=2 -Wformat-truncation=2 -Wunused-const-variable=1 -Wuseless-cast -Wold-style-cast -Wsign-promo -Wvirtual-inheritance -Wstrict-null-sentinel -Wsync-nand -Wunused-parameter -Wunused -Wsuggest-attribute=pure -Wsuggest-attribute=const -Wsuggest-attribute=noreturn -Wsuggest-attribute=malloc -Wmissing-noreturn -Wmissing-format-attribute -Wimplicit-fallthrough=5 -Wif-not-aligned -Wformat-signedness -Wsuggest-override -Wsuggest-final-methods -Wsuggest-final-types -Wstack-protector -Wenum-compare -Wmultiple-inheritance -Wdouble-promotion -Wsign-conversion -Wfloat-conversion -Wconversion -Wnoexcept -Wnoexcept-type -Wclass-memaccess -Wregister -Wctor-dtor-privacy -Wsynth -Wlto-type-mismatch -Wliteral-suffix -Wdelete-non-virtual-dtor -Wno-unused -Wno-missing-format-attribute -Wc++17-compat -Wno-cast-function-type)
+    target_compile_options(segment01 PRIVATE -Wall -Wextra -Wpedantic -Weffc++ -Wundef -Wcast-align -Wwrite-strings -Wlogical-op -Wmissing-declarations -Wredundant-decls -Wshadow -Woverloaded-virtual -Wzero-as-null-pointer-constant -Wswitch-default -Wswitch-enum -Wmissing-include-dirs -Wunreachable-code -Winline -Winit-self -Wnon-virtual-dtor -pedantic -Wcast-qual -Wdisabled-optimization -Wdiv-by-zero -Wendif-labels -Wformat-extra-args -Wformat-nonliteral -Wformat-security -Wformat-y2k -Wimport -Winvalid-pch -Wmissing-braces -Wmultichar -Wpacked -Wpointer-arith -Wreturn-type -Wsequence-point -Wvariadic-macros -Wfloat-equal -Wstrict-aliasing=1 -Wstrict-overflow=5 -Wunsafe-loop-optimizations -Wnull-dereference -Wuninitialized -Wstringop-overflow=4 -Wstringop-truncation -Walloc-zero -Walloca -Wduplicated-branches -Wduplicated-cond -Wtrampolines -Wunused-macros -Wconditionally-supported -Wdate-time -Wvarargs -Wvector-operation-performance -Wopenmp-simd -Whsa -Wextra-semi -Warray-bounds=2 -Wformat-truncation=2 -Wunused-const-variable=1 -Wuseless-cast -Wold-style-cast -Wsign-promo -Wvirtual-inheritance -Wstrict-null-sentinel -Wsync-nand -Wunused-parameter -Wunused -Wsuggest-attribute=pure -Wsuggest-attribute=const -Wsuggest-attribute=noreturn -Wsuggest-attribute=malloc -Wmissing-noreturn -Wmissing-format-attribute -Wimplicit-fallthrough=5 -Wif-not-aligned -Wformat-signedness -Wsuggest-override -Wsuggest-final-methods -Wsuggest-final-types -Wstack-protector -Wenum-compare -Wmultiple-inheritance -Wdouble-promotion -Wsign-conversion -Wfloat-conversion -Wconversion -Wnoexcept -Wnoexcept-type -Wclass-memaccess -Wregister -Wctor-dtor-privacy -Wsynth -Wlto-type-mismatch -Wliteral-suffix -Wdelete-non-virtual-dtor -Wno-unused -Wno-missing-format-attribute -Wc++17-compat -Wno-cast-function-type)
 endif()
 # -Wlong-long
 
 # Librairies SFML + dépendances Windows
-target_link_libraries(${EXECUTABLE_NAME} PRIVATE
+target_link_libraries(segment01 PRIVATE
     sfml-audio-s
     sfml-graphics-s
     sfml-window-s
@@ -68,6 +69,13 @@ target_link_libraries(${EXECUTABLE_NAME} PRIVATE
     winmm
     psapi
     pthread
+)
+
+# Création de l'exécutable
+add_executable(${EXECUTABLE_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
+
+target_link_libraries(${EXECUTABLE_NAME} PRIVATE
+    segment01
 )
 
 set(SRC_ASSETS "${CMAKE_CURRENT_SOURCE_DIR}/assets")
@@ -118,5 +126,5 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(GAME)
 
-# Définir le projet de démarrage dans Visual Studio
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${EXECUTABLE_NAME})
+enable_testing()
+add_subdirectory(tests)
