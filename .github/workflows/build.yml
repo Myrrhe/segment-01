@@ -126,9 +126,11 @@ jobs:
           cd build
           ls -a CMakeFiles/segment01.dir/src
           for f in ../../src/*.cpp; do
+            echo "a $f"
             gcov -o CMakeFiles/segment01.dir/src "$f"
           done
           for f in ../../include/*.hpp; do
+            echo "b $f"
             gcov -o CMakeFiles/segment01.dir/src "$f"
           done
       # 10
