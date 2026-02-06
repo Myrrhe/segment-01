@@ -104,7 +104,7 @@ jobs:
         shell: bash
         run: |
           cd build
-          ctest --output-on-failure --build-config Release
+          ctest --output-on-failure --build-config Release -VV
       # 8
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
@@ -114,3 +114,5 @@ jobs:
         with:
           args: >
             --define "sonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
+
+# Le point d'entrée de procédure _ZNSt15basic_streambuflcSt11char_traitslcEE7seekpostESt4fposlç_MbstatetESt13_los_Openmode est introuvable dans la bibliothèque de liens dynamiques C:\Users\Thomas BAUDIN\perso\projects\segment-01\build\bin\tests.exe

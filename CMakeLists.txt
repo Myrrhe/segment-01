@@ -43,6 +43,10 @@ target_link_directories(segment01
     PUBLIC "C:/Program Files (x86)/SFML/lib"
 )
 
+if(MINGW)
+    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
+endif()
+
 # Options de compilation spécifiques selon le compilateur
 if (MSVC)
     target_compile_options(segment01 PRIVATE /W4 /permissive-)
