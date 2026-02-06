@@ -97,9 +97,9 @@ jobs:
           ctest --output-on-failure --build-config Release -VV
       # 9
       - name: Generate coverage report
-        shell: bash
-        env:
-          PATH: "/mingw64/bin:$PATH"
+        shell: msys2 {0}
+        # env:
+        #   PATH: "/mingw64/bin:$PATH"
         run: |
           # export PATH="/mingw64/bin:$PATH"
           cd build
