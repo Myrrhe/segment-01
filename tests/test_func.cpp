@@ -6,5 +6,5 @@
 // }
 
 TEST_CASE("Sanity", "[sanity]") {
-    REQUIRE(2 + 2 == 4);
+    REQUIRE(2 + 2 == 5);
 }
