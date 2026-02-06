@@ -123,9 +123,9 @@ jobs:
       - name: Generate gcov files
         shell: bash
         run: |
-          cd build/CMakeFiles/segment01.dir/src
+          cd build
           ls -a .
-          for f in ../../../../src/*.cpp; do
+          for f in ../src/*.cpp; do
             echo "a $(basename "$f")"
             
             fname=$(basename "$f")
@@ -133,7 +133,7 @@ jobs:
 
             if [ -f "$gcda" ]; then  # vérifie que le fichier .gcda existe
               echo "Generating gcov for $fname"
-              gcov -o . "$fname.cpp"
+              gcov -o CMakeFiles/segment01.dir/src "$fname.cpp"
             else
               echo "Skipping $fname: $gcda does not exist"
             fi
@@ -159,11 +159,11 @@ jobs:
           #   fi
           # done
       # 10
-      - name: Debug coverage files
-        shell: bash
-        run: |
-          ls -lah build
-          head -n 20 build/coverage.info
+      # - name: Debug coverage files
+      #   shell: bash
+      #   run: |
+      #     ls -lah build
+      #     head -n 20 build/coverage.info
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
         # uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
