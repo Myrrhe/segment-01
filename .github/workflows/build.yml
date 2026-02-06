@@ -113,6 +113,7 @@ jobs:
             "*/include/*" \
             --output-file coverage.info
           # vérifier
+          cat coverage.info
           lcov --list coverage.info
           # ls -a .
       # 10
@@ -121,7 +122,7 @@ jobs:
         run: |
           ls -lah build
           # head -n 200 build/coverage.info
-          cat build/coverage.info
+          # cat build/coverage.info
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
         # uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
