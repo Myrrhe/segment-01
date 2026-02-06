@@ -94,10 +94,11 @@ jobs:
         run: |
           cd build
           ldd bin/tests.exe || true
-      - name: List DLLs
-        run: dir build\bin
-      - name: Dependency check
-        run: dumpbin /dependents build\bin\tests.exe
+      - name: Show DLLs
+        shell: bash
+        run: |
+          cd build
+          objdump -p bin/tests.exe | grep "DLL Name"
       # 7bis
       - name: Run unit tests (CTest)
         shell: bash
