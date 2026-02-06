@@ -108,9 +108,13 @@ jobs:
           lcov --directory . --capture --output-file coverage.info
           # exclure les fichiers de test
           # lcov --remove coverage.info '*tests/*' --output-file coverage.info
+          lcov --extract build/coverage.full.info \
+            "*/src/*" \
+            "*/include/*" \
+            --output-file build/coverage.info
           # vérifier
           lcov --list coverage.info
-          ls -a .
+          # ls -a .
       # 10
       - name: Debug coverage files
         shell: bash
