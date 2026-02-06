@@ -99,6 +99,7 @@ jobs:
       - name: Generate coverage report
         shell: bash
         run: |
+          export PATH="/mingw64/bin:$PATH"
           cd build
           # reset counters
           lcov --directory . --zerocounters
