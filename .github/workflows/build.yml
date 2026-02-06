@@ -121,10 +121,15 @@ jobs:
       #     # cat coverage.info
       #     lcov --list coverage.info
       - name: Generate gcov files
+        shell: bash
         run: |
           cd build
-          for f in ../../src/*.cpp; do gcov -o CMakeFiles/segment01.dir/src "$f"; done
-          for f in ../../include/*.hpp; do gcov -o CMakeFiles/segment01.dir/src "$f"; done
+          for f in ../../src/*.cpp; do
+            gcov -o CMakeFiles/segment01.dir/src "$f"
+          done
+          for f in ../../include/*.hpp; do
+            gcov -o CMakeFiles/segment01.dir/src "$f"
+          done
       # 10
       - name: Debug coverage files
         shell: bash
