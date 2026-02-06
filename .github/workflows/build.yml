@@ -118,7 +118,7 @@ jobs:
             --output-file coverage.info
 
           # vérifier
-          cat coverage.info
+          # cat coverage.info
           lcov --list coverage.info
       # 10
       - name: Debug coverage files
@@ -134,7 +134,7 @@ jobs:
         with:
           args: >
             --define "sonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
-            --define "sonar.cfamily.gcov.reportsPath=build"
+            --define "sonar.cfamily.gcov.reportsPath=build/coverage.info"
 
 # Le point d'entrée de procédure _ZNSt15basic_streambuflcSt11char_traitslcEE7seekpostESt4fposlç_MbstatetESt13_los_Openmode est introuvable dans la bibliothèque de liens dynamiques C:\Users\Thomas BAUDIN\perso\projects\segment-01\build\bin\tests.exe
 
