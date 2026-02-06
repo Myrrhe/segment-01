@@ -107,11 +107,11 @@ jobs:
           # capture coverage
           lcov --directory . --capture --output-file coverage.info
           # exclure les fichiers de test
-          # lcov --remove coverage.info '*tests/*' --output-file coverage.info
-          lcov --extract build/coverage.full.info \
+          # lcov --remove coverage.info '*tests/*' --output-file coverage.full.info
+          lcov --extract coverage.full.info \
             "*/src/*" \
             "*/include/*" \
-            --output-file build/coverage.info
+            --output-file coverage.info
           # vérifier
           lcov --list coverage.info
           # ls -a .
