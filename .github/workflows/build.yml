@@ -133,7 +133,7 @@ jobs:
 
             if [ -f "$gcda" ]; then  # vérifie que le fichier .gcda existe
               echo "Generating gcov for $fname"
-              gcov "$fname"
+              gcov "$fname.cpp"
             else
               echo "Skipping $fname: $gcda does not exist"
             fi
