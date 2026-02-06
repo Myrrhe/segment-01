@@ -89,7 +89,12 @@ jobs:
           }
           Write-Host "Using build-wrapper at: $bwExe"
           & $bwExe --out-dir $env:BUILD_WRAPPER_OUT_DIR cmake --build build --config Release
-       # 7bis
+      - name: Show linked DLLs
+        shell: bash
+        run: |
+          cd build
+          ldd bin/tests.exe || true
+        # 7bis
       - name: Run unit tests (CTest)
         shell: bash
         run: |
