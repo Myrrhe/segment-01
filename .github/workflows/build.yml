@@ -105,7 +105,7 @@ jobs:
           # relancer les tests
           ctest --output-on-failure --build-config Debug
           # capture coverage
-          lcov --directory . --capture --output-file coverage.info
+          lcov --directory . --capture --output-file coverage.full.info
           # exclure les fichiers de test
           # lcov --remove coverage.info '*tests/*' --output-file coverage.full.info
           lcov --extract coverage.full.info \
