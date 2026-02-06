@@ -124,6 +124,7 @@ jobs:
         shell: bash
         run: |
           cd build
+          ls -a CMakeFiles/segment01.dir/src
           for f in ../../src/*.cpp; do
             gcov -o CMakeFiles/segment01.dir/src "$f"
           done
