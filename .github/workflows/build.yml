@@ -126,12 +126,12 @@ jobs:
           cd build/CMakeFiles/segment01.dir/src
           ls -a .
           for f in ../../../../src/*.cpp; do
-            echo "a $f"
-            gcov -o CMakeFiles/segment01.dir/src "$f"
+            echo "a $(basename "$f")"
+            gcov -o CMakeFiles/segment01.dir/src "$(basename "$f")"
           done
           for f in ../../../../include/*.hpp; do
-            echo "b $f"
-            gcov -o CMakeFiles/segment01.dir/src "$f"
+            echo "b $(basename "$f")"
+            gcov -o CMakeFiles/segment01.dir/src "$(basename "$f")"
           done
       # 10
       - name: Debug coverage files
