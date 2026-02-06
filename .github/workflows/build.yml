@@ -127,11 +127,11 @@ jobs:
           ls -a .
           for f in ../../../../src/*.cpp; do
             echo "a $(basename "$f")"
-            gcov -o . "$(basename "$f")"
+            gcov -o . "./$(basename "$f")"
           done
           for f in ../../../../include/*.hpp; do
             echo "b $(basename "$f")"
-            gcov -o . "$(basename "$f")"
+            gcov -o . "./$(basename "$f")"
           done
       # 10
       - name: Debug coverage files
