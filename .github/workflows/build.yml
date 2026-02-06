@@ -96,30 +96,35 @@ jobs:
           cd build
           ctest --output-on-failure --build-config Debug -VV
       # 9
-      - name: Generate coverage report
-        shell: msys2 {0}
-        # env:
-        #   PATH: "/mingw64/bin:$PATH"
-        run: |
-          # export PATH="/mingw64/bin:$PATH"
-          cd build
-          # reset counters
-          lcov --directory . --zerocounters
-          # relancer les tests
-          ctest --output-on-failure --build-config Debug
-          # capture coverage
-          lcov --directory . --capture --output-file coverage.info
-          # exclure les fichiers de test
-          # lcov --remove coverage.info '*tests/*' --output-file coverage.info
+      # - name: Generate coverage report
+      #   shell: msys2 {0}
+      #   # env:
+      #   #   PATH: "/mingw64/bin:$PATH"
+      #   run: |
+      #     # export PATH="/mingw64/bin:$PATH"
+      #     cd build
+      #     # reset counters
+      #     lcov --directory . --zerocounters
+      #     # relancer les tests
+      #     ctest --output-on-failure --build-config Debug
+      #     # capture coverage
+      #     lcov --directory . --capture --output-file coverage.info
+      #     # exclure les fichiers de test
+      #     # lcov --remove coverage.info '*tests/*' --output-file coverage.info
   
-          lcov --extract coverage.info \
-            "D:\\a\\segment-01\\segment-01\\src\\*" \
-            "D:\\a\\segment-01\\segment-01\\include\\*" \
-            --output-file coverage.info
+      #     lcov --extract coverage.info \
+      #       "D:\\a\\segment-01\\segment-01\\src\\*" \
+      #       "D:\\a\\segment-01\\segment-01\\include\\*" \
+      #       --output-file coverage.info
 
-          # vérifier
-          # cat coverage.info
-          lcov --list coverage.info
+      #     # vérifier
+      #     # cat coverage.info
+      #     lcov --list coverage.info
+      - name: Generate gcov files
+        run: |
+          cd build
+          for f in ../../src/*.cpp; do gcov -o CMakeFiles/segment01.dir/src "$f"; done
+          for f in ../../include/*.hpp; do gcov -o CMakeFiles/segment01.dir/src "$f"; done
       # 10
       - name: Debug coverage files
         shell: bash
@@ -134,7 +139,7 @@ jobs:
         with:
           args: >
             --define "sonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
-            --define "sonar.cfamily.llvm-cov.reportPath=build/coverage.info"
+            --define "sonar.cfamily.gcov.reportsPath=build"
 
 # --define "sonar.cfamily.gcov.reportsPath=build/coverage.info"
 
