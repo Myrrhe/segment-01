@@ -122,5 +122,6 @@ jobs:
         with:
           args: >
             --define "sonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
+            --define "sonar.cfamily.gcov.reportsPath=build"
 
 # Le point d'entrée de procédure _ZNSt15basic_streambuflcSt11char_traitslcEE7seekpostESt4fposlç_MbstatetESt13_los_Openmode est introuvable dans la bibliothèque de liens dynamiques C:\Users\Thomas BAUDIN\perso\projects\segment-01\build\bin\tests.exe
