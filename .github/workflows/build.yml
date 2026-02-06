@@ -172,6 +172,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
+            --define "sonar.tests=tests"
+            --define "sonar.test.inclusions=tests/**/*.cpp"
             --define "sonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
             --define "sonar.cfamily.gcov.reportsPath=build/CMakeFiles/segment01.dir/src"
 
