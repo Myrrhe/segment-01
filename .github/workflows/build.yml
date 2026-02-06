@@ -94,7 +94,9 @@ jobs:
         run: |
           cd build
           ldd bin/tests.exe || true
-        # 7bis
+      - name: Add build/bin to PATH
+        run: echo "${{ github.workspace }}\\build\\bin" >> $GITHUB_PATH
+      # 7bis
       - name: Run unit tests (CTest)
         shell: bash
         run: |
