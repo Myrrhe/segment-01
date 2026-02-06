@@ -56,9 +56,14 @@ endif()
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     option(ENABLE_COVERAGE "Enable code coverage" ON)
     if(ENABLE_COVERAGE)
-        target_compile_options(segment01 PRIVATE --coverage -O0 -g)
-        add_compile_options(--coverage -O0 -g)
-        add_link_options(--coverage)
+        # target_compile_options(segment01 PRIVATE --coverage -O0 -g)
+        # add_compile_options(--coverage -O0 -g)
+        # add_link_options(--coverage)
+
+
+        target_compile_options(segment01 PRIVATE -O0 -g --coverage)
+        # target_link_options(segment01 PRIVATE --coverage)
+        target_link_options(segment01 INTERFACE --coverage)
     endif()
 endif()
 

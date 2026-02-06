@@ -12,6 +12,9 @@ add_executable(tests
     test_func.cpp
 )
 
+target_compile_options(tests PRIVATE -O0 -g --coverage)
+target_link_options(tests PRIVATE --coverage)
+
 target_link_libraries(tests
     PRIVATE
         segment01
