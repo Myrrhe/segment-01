@@ -94,37 +94,11 @@ jobs:
         shell: bash
         run: |
           cd build
-          ctest --output-on-failure --build-config Debug -VV
-      # 9
-      # - name: Generate coverage report
-      #   shell: msys2 {0}
-      #   # env:
-      #   #   PATH: "/mingw64/bin:$PATH"
-      #   run: |
-      #     # export PATH="/mingw64/bin:$PATH"
-      #     cd build
-      #     # reset counters
-      #     lcov --directory . --zerocounters
-      #     # relancer les tests
-      #     ctest --output-on-failure --build-config Debug
-      #     # capture coverage
-      #     lcov --directory . --capture --output-file coverage.info
-      #     # exclure les fichiers de test
-      #     # lcov --remove coverage.info '*tests/*' --output-file coverage.info
-  
-      #     lcov --extract coverage.info \
-      #       "D:\\a\\segment-01\\segment-01\\src\\*" \
-      #       "D:\\a\\segment-01\\segment-01\\include\\*" \
-      #       --output-file coverage.info
-
-      #     # vérifier
-      #     # cat coverage.info
-      #     lcov --list coverage.info
+          ctest --output-on-failure --build-config Debug
       - name: Generate gcov files
         shell: bash
         run: |
           cd build/CMakeFiles/segment01.dir/src
-          ls -a .
           for f in ../../../../src/*.cpp; do
             echo "a $(basename "$f")"
             
@@ -137,15 +111,7 @@ jobs:
             else
               echo "Skipping $fname: $gcda does not exist"
             fi
-
-            # gcov -o . "./$(basename "$f")"
           done
-          ls -a .
-
-          # for f in ../../../../include/*.hpp; do
-          #   echo "b $(basename "$f")"
-          #   gcov -o . "./$(basename "$f")"
-          # done
 
           # for hdr in ../../../../include/*.hpp; do
           #   fname=$(basename "$hdr")           # ex: FontManager.hpp
@@ -160,11 +126,6 @@ jobs:
           #   fi
           # done
       # 10
-      # - name: Debug coverage files
-      #   shell: bash
-      #   run: |
-      #     ls -lah build
-      #     head -n 20 build/coverage.info
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
         # uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
@@ -176,36 +137,3 @@ jobs:
             --define "sonar.test.inclusions=tests/**/*.cpp"
             --define "sonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
             --define "sonar.cfamily.gcov.reportsPath=build/CMakeFiles/segment01.dir/src"
-
-# --define "sonar.cfamily.gcov.reportsPath=build/coverage.info"
-
-# Le point d'entrée de procédure _ZNSt15basic_streambuflcSt11char_traitslcEE7seekpostESt4fposlç_MbstatetESt13_los_Openmode est introuvable dans la bibliothèque de liens dynamiques C:\Users\Thomas BAUDIN\perso\projects\segment-01\build\bin\tests.exe
-
-# # 9
-#       - name: Generate coverage report
-#         shell: msys2 {0}
-#         run: |
-#           cd build
-#           # reset counters
-#           lcov --directory . --zerocounters
-#           # relancer les tests
-#           ctest --output-on-failure --build-config Debug
-#           # capture coverage
-#           lcov --directory . --capture --output-file coverage.full.info
-#           # exclure les fichiers de test
-#           # lcov --remove coverage.info '*tests/*' --output-file coverage.full.info
-#           lcov --extract coverage.full.info \
-#             "*/src/*" \
-#             "*/include/*" \
-#             --output-file coverage.info
-#           # vérifier
-#           cat coverage.info
-#           lcov --list coverage.info
-#           # ls -a .
-#       # 10
-#       - name: Debug coverage files
-#         shell: bash
-#         run: |
-#           ls -lah build
-#           # head -n 200 build/coverage.info
-#           # cat build/coverage.info
