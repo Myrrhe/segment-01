@@ -33,7 +33,7 @@ Quaternion::Quaternion(const float64_t newX, const float64_t newY,
 
 Quaternion::Quaternion(const std::complex<float64_t> newXY,
                        const std::complex<float64_t> newZT)
-    : x(newXY.real()), y(newXY.real()), z(newZT.imag()), t(newZT.imag())
+    : x(newXY.real()), y(newXY.imag()), z(newZT.real()), t(newZT.imag())
 {
 }
 
@@ -207,7 +207,7 @@ Quaternion Quaternion::getConjugation() const
 Quaternion Quaternion::getReciprocal() const
 {
     const float64_t divisor = (x * x) + (y * y) + (z * z) + (t * t);
-    return Quaternion(x / divisor, y / divisor, z / divisor, t / divisor);
+    return Quaternion(x / divisor, - y / divisor, - z / divisor, - t / divisor);
 }
 
 Quaternion &Quaternion::setNorm(const float64_t newNorm)
@@ -225,7 +225,7 @@ Quaternion &Quaternion::conjugate()
 {
     y *= -1.0;
     z *= -1.0;
-    z *= -1.0;
+    t *= -1.0;
     return *this;
 }
 
@@ -275,6 +275,18 @@ void Quaternion::setXY(const std::complex<float64_t> newXY)
 {
     x = newXY.real();
     y = newXY.imag();
+}
+
+void Quaternion::setZT(const float64_t newZ, const float64_t newT)
+{
+    z = newZ;
+    t = newT;
+}
+
+void Quaternion::setZT(const std::complex<float64_t> newZT)
+{
+    z = newZT.real();
+    t = newZT.imag();
 }
 
 void Quaternion::setXYZT(const float64_t newX, const float64_t newY,

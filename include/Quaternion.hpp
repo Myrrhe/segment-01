@@ -72,6 +72,8 @@ public:
     void setT(const float64_t newT);
     void setXY(const float64_t newX, const float64_t newY);
     void setXY(const std::complex<float64_t> newXY);
+    void setZT(const float64_t newZ, const float64_t newT);
+    void setZT(const std::complex<float64_t> newZT);
     void setXYZT(const float64_t newX, const float64_t newY,
                  const float64_t newZ, const float64_t newT);
     void setXYZT(const std::complex<float64_t> newXY,
