@@ -8,8 +8,12 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(Catch2)
 
+file(GLOB TEST_SOURCES CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
+)
+
 add_executable(tests
-    test_func.cpp
+    ${TEST_SOURCES}
 )
 
 target_compile_options(tests PRIVATE -O0 -g --coverage)
