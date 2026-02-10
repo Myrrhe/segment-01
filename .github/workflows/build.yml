@@ -39,7 +39,6 @@ jobs:
             mingw-w64-x86_64-make
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-lcov
-            gcovr
       # 4
       - name: Install SFML
         if: steps.cache-sfml.outputs.cache-hit != 'true'
@@ -96,40 +95,44 @@ jobs:
         run: |
           cd build
           ctest --output-on-failure --build-config Debug
-      - name: Generate gcov files
-        shell: bash
+      - name: Generate coverage report
+        shell: msys2 {0}
         run: |
-          gcovr \
-          -r . \
-          --sonarqube coverage.xml \
-          --exclude-directories build \
-          --gcov-ignore-errors=no_working_dir_found
+          gcovr -r . --sonarqube coverage.xml
+      # - name: Generate gcov files
+      #   shell: bash
+      #   run: |
+      #     gcovr \
+      #     -r . \
+      #     --sonarqube coverage.xml \
+      #     --exclude-directories build \
+      #     --gcov-ignore-errors=no_working_dir_found
 
-          # cd build/CMakeFiles/segment01.dir/src
-          # for f in ../../../../src/*.cpp; do
-          #   echo "a $(basename "$f")"
-          #   fname=$(basename "$f")
-          #   gcda="$fname.gcda"
-          #   if [ -f "$gcda" ]; then  # vérifie que le fichier .gcda existe
-          #     echo "Generating gcov for $fname"
-          #     gcov -o . "$fname.cpp"
-          #   else
-          #     echo "Skipping $fname: $gcda does not exist"
-          #   fi
-          # done
+      #     # cd build/CMakeFiles/segment01.dir/src
+      #     # for f in ../../../../src/*.cpp; do
+      #     #   echo "a $(basename "$f")"
+      #     #   fname=$(basename "$f")
+      #     #   gcda="$fname.gcda"
+      #     #   if [ -f "$gcda" ]; then  # vérifie que le fichier .gcda existe
+      #     #     echo "Generating gcov for $fname"
+      #     #     gcov -o . "$fname.cpp"
+      #     #   else
+      #     #     echo "Skipping $fname: $gcda does not exist"
+      #     #   fi
+      #     # done
 
-          # for hdr in ../../../../include/*.hpp; do
-          #   fname=$(basename "$hdr")           # ex: FontManager.hpp
-          #   # Pour les headers, gcov recherche le .gcda correspondant dans le même répertoire que le .cpp
-          #   # On prend le même principe
-          #   gcda="${fname%.hpp}.cpp.gcda"      # si le header est inclus dans un cpp du même nom
-          #   if [ -f "$gcda" ]; then
-          #     echo "Generating gcov for header $fname"
-          #     gcov -o . "$hdr.hpp"
-          #   else
-          #     echo "Skipping header $fname: $gcda does not exist"
-          #   fi
-          # done
+      #     # for hdr in ../../../../include/*.hpp; do
+      #     #   fname=$(basename "$hdr")           # ex: FontManager.hpp
+      #     #   # Pour les headers, gcov recherche le .gcda correspondant dans le même répertoire que le .cpp
+      #     #   # On prend le même principe
+      #     #   gcda="${fname%.hpp}.cpp.gcda"      # si le header est inclus dans un cpp du même nom
+      #     #   if [ -f "$gcda" ]; then
+      #     #     echo "Generating gcov for header $fname"
+      #     #     gcov -o . "$hdr.hpp"
+      #     #   else
+      #     #     echo "Skipping header $fname: $gcda does not exist"
+      #     #   fi
+      #     # done
       # 10
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
