@@ -39,6 +39,10 @@ jobs:
             mingw-w64-x86_64-make
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-lcov
+      # 3bis
+      - name: Install gcovr
+        run: |
+          python3 -m pip install gcovr
       # 4
       - name: Install SFML
         if: steps.cache-sfml.outputs.cache-hit != 'true'
