@@ -42,7 +42,7 @@ jobs:
       # 3bis
       - name: Install gcovr
         run: |
-          python3 -m pip install gcovr
+          pip install gcovr
       # 4
       - name: Install SFML
         if: steps.cache-sfml.outputs.cache-hit != 'true'
@@ -100,7 +100,6 @@ jobs:
           cd build
           ctest --output-on-failure --build-config Debug
       - name: Generate coverage report
-        shell: msys2 {0}
         run: |
           gcovr -r . --sonarqube coverage.xml
       # - name: Generate gcov files
