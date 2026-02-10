@@ -98,20 +98,24 @@ jobs:
       - name: Generate gcov files
         shell: bash
         run: |
-          cd build/CMakeFiles/segment01.dir/src
-          for f in ../../../../src/*.cpp; do
-            echo "a $(basename "$f")"
-            
-            fname=$(basename "$f")
-            gcda="$fname.gcda"
+          gcovr \
+          -r . \
+          --sonarqube coverage.xml \
+          --exclude-directories build \
+          --gcov-ignore-errors=no_working_dir_found
 
-            if [ -f "$gcda" ]; then  # vérifie que le fichier .gcda existe
-              echo "Generating gcov for $fname"
-              gcov -o . "$fname.cpp"
-            else
-              echo "Skipping $fname: $gcda does not exist"
-            fi
-          done
+          # cd build/CMakeFiles/segment01.dir/src
+          # for f in ../../../../src/*.cpp; do
+          #   echo "a $(basename "$f")"
+          #   fname=$(basename "$f")
+          #   gcda="$fname.gcda"
+          #   if [ -f "$gcda" ]; then  # vérifie que le fichier .gcda existe
+          #     echo "Generating gcov for $fname"
+          #     gcov -o . "$fname.cpp"
+          #   else
+          #     echo "Skipping $fname: $gcda does not exist"
+          #   fi
+          # done
 
           # for hdr in ../../../../include/*.hpp; do
           #   fname=$(basename "$hdr")           # ex: FontManager.hpp
@@ -136,4 +140,5 @@ jobs:
             --define "sonar.tests=tests"
             --define "sonar.test.inclusions=tests/**/*.cpp"
             --define "sonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
-            --define "sonar.cfamily.gcov.reportsPath=build/CMakeFiles/segment01.dir/src"
+            # --define "sonar.cfamily.gcov.reportsPath=build/CMakeFiles/segment01.dir/src"
+            --define "Dsonar.coverageReportPaths=coverage.xml
