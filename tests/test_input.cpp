@@ -145,6 +145,8 @@ TEST_CASE("Input", "[input]")
     REQUIRE(segment01::Input("XAxis+0").getIdJoystick() == 0);
     REQUIRE(segment01::Input("YAxis-0").getIdJoystick() == 0);
     REQUIRE(segment01::Input("YAxis+0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("ZAxis-0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("ZAxis+0").getIdJoystick() == 0);
     REQUIRE(segment01::Input("RAxis-0").getIdJoystick() == 0);
     REQUIRE(segment01::Input("RAxis+0").getIdJoystick() == 0);
     REQUIRE(segment01::Input("RAxis-0").getIdJoystick() == 0);
@@ -158,9 +160,13 @@ TEST_CASE("Input", "[input]")
     REQUIRE(segment01::Input("PovYAxis-0").getIdJoystick() == 0);
     REQUIRE(segment01::Input("PovYAxis+0").getIdJoystick() == 0);
     REQUIRE(segment01::Input("JoystickButton0-0").getButtonJoyStick() == 0);
+    REQUIRE(segment01::Input("JoystickButton0-1").getButtonJoyStick() == 1);
 
     REQUIRE(segment01::Input(segment01::Input()).getTypeInput() ==
             segment01::Input::TypeInput::ERROR_TYPE_INPUT);
+    auto i1 = segment01::Input(sf::Keyboard::Key::A);
+    i1 = segment01::Input(sf::Keyboard::Key::B);
+    REQUIRE(i1.getKey() == sf::Keyboard::Key::B);
 
     REQUIRE(segment01::Input(sf::Keyboard::Key::A).toString() == "A");
     REQUIRE(segment01::Input(sf::Keyboard::Key::B).toString() == "B");
@@ -330,7 +336,11 @@ TEST_CASE("Input", "[input]")
     REQUIRE(segment01::Input("A") != segment01::Input("B"));
     REQUIRE(segment01::Input("LeftMouse") != segment01::Input("RightMouse"));
     REQUIRE(segment01::Input("XAxis-0") != segment01::Input("XAxis+0"));
+    REQUIRE(segment01::Input("XAxis-0") != segment01::Input("YAxis-0"));
+    REQUIRE(segment01::Input("XAxis-0") != segment01::Input("XAxis-1"));
     REQUIRE(segment01::Input("JoystickButton0-0") !=
             segment01::Input("JoystickButton1-0"));
+    REQUIRE(segment01::Input("JoystickButton0-0") !=
+            segment01::Input("JoystickButton0-1"));
     REQUIRE(segment01::Input("error") != segment01::Input("error"));
 }
