@@ -16,6 +16,11 @@ TEST_CASE("Quaternion", "[quaternion]")
     REQUIRE_THAT(
         segment01::Quaternion(segment01::Quaternion(1.0, 2.0, 3.0, 4.0)).y,
         Catch::Matchers::WithinAbs(2.0, segment01::Constant::m_epsilon));
+    auto q1 = segment01::Quaternion(1.0, 2.0, 3.0, 4.0);
+    q1 = segment01::Quaternion(2.0, 3.0, 4.0, 5.0);
+    REQUIRE_THAT(
+        q1.x,
+        Catch::Matchers::WithinAbs(2.0, segment01::Constant::m_epsilon));
     REQUIRE_THAT(
         segment01::Quaternion(1.0, 2.0, 3.0, 4.0)[0],
         Catch::Matchers::WithinAbs(1.0, segment01::Constant::m_epsilon));
@@ -28,11 +33,24 @@ TEST_CASE("Quaternion", "[quaternion]")
     REQUIRE_THAT(
         segment01::Quaternion(1.0, 2.0, 3.0, 4.0)[3],
         Catch::Matchers::WithinAbs(4.0, segment01::Constant::m_epsilon));
+    const auto q2 = segment01::Quaternion(1.0, 2.0, 3.0, 4.0);
     REQUIRE_THAT(
-        +segment01::Quaternion(1.0, 2.0, 3.0, 4.0).y,
+        q2[0],
+        Catch::Matchers::WithinAbs(1.0, segment01::Constant::m_epsilon));
+    REQUIRE_THAT(
+        q2[1],
         Catch::Matchers::WithinAbs(2.0, segment01::Constant::m_epsilon));
     REQUIRE_THAT(
-        -segment01::Quaternion(1.0, 2.0, 3.0, 4.0).y,
+        q2[2],
+        Catch::Matchers::WithinAbs(3.0, segment01::Constant::m_epsilon));
+    REQUIRE_THAT(
+        q2[3],
+        Catch::Matchers::WithinAbs(4.0, segment01::Constant::m_epsilon));
+    REQUIRE_THAT(
+        (+segment01::Quaternion(1.0, 2.0, 3.0, 4.0)).y,
+        Catch::Matchers::WithinAbs(2.0, segment01::Constant::m_epsilon));
+    REQUIRE_THAT(
+        (-segment01::Quaternion(1.0, 2.0, 3.0, 4.0)).y,
         Catch::Matchers::WithinAbs(-2.0, segment01::Constant::m_epsilon));
     REQUIRE_THAT(
         segment01::Quaternion(1.0, 2.0, 3.0, 4.0)++.x,
@@ -178,12 +196,44 @@ TEST_CASE("Quaternion", "[quaternion]")
             segment01::Quaternion(2.0, 2.0, 3.0, 4.0));
     REQUIRE(segment01::Quaternion(2.0, 3.0, 4.0, 5.0) >
             segment01::Quaternion(1.0, 2.0, 3.0, 4.0));
+    REQUIRE(!(segment01::Quaternion(2.0, 3.0, 4.0, 4.0) >
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
+    REQUIRE(!(segment01::Quaternion(2.0, 3.0, 3.0, 5.0) >
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
+    REQUIRE(!(segment01::Quaternion(2.0, 2.0, 4.0, 4.0) >
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
+    REQUIRE(!(segment01::Quaternion(1.0, 3.0, 4.0, 4.0) >
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
     REQUIRE(segment01::Quaternion(0.0, 1.0, 2.0, 3.0) <
             segment01::Quaternion(1.0, 2.0, 3.0, 4.0));
+    REQUIRE(!(segment01::Quaternion(1.0, 1.0, 2.0, 3.0) <
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
+    REQUIRE(!(segment01::Quaternion(0.0, 2.0, 2.0, 3.0) <
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
+    REQUIRE(!(segment01::Quaternion(0.0, 1.0, 3.0, 3.0) <
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
+    REQUIRE(!(segment01::Quaternion(0.0, 1.0, 2.0, 4.0) <
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
     REQUIRE(segment01::Quaternion(1.0, 2.0, 3.0, 4.0) >=
             segment01::Quaternion(1.0, 2.0, 3.0, 4.0));
+    REQUIRE(!(segment01::Quaternion(0.0, 2.0, 3.0, 4.0) >=
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
+    REQUIRE(!(segment01::Quaternion(1.0, 1.0, 3.0, 4.0) >=
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
+    REQUIRE(!(segment01::Quaternion(1.0, 2.0, 2.0, 4.0) >=
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
+    REQUIRE(!(segment01::Quaternion(1.0, 2.0, 3.0, 3.0) >=
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
     REQUIRE(segment01::Quaternion(1.0, 2.0, 3.0, 4.0) <=
             segment01::Quaternion(1.0, 2.0, 3.0, 4.0));
+    REQUIRE(!(segment01::Quaternion(2.0, 2.0, 3.0, 4.0) <=
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
+    REQUIRE(!(segment01::Quaternion(1.0, 3.0, 3.0, 4.0) <=
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
+    REQUIRE(!(segment01::Quaternion(1.0, 2.0, 4.0, 4.0) <=
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
+    REQUIRE(!(segment01::Quaternion(1.0, 2.0, 3.0, 5.0) <=
+            segment01::Quaternion(1.0, 2.0, 3.0, 4.0)));
     REQUIRE_THAT(
         (segment01::Quaternion(1.0, 2.0, 3.0, 4.0) +
          segment01::Quaternion(1.0, 1.0, 1.0, 1.0))
