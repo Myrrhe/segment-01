@@ -52,7 +52,7 @@ public:
     template <typename... Args>
     Logger &logging(const LogLevel level, const Args &...args)
     {
-        if (level >= s_level.load(std::memory_order_relaxed))
+        if (true)
         {
             const std::scoped_lock lock(m_mtx);
             std::ostringstream oss;
