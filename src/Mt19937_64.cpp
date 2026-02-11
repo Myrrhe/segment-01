@@ -57,7 +57,7 @@ uint64_t Mt19937_64::operator()()
 
 void Mt19937_64::twist()
 {
-    for (std::size_t i = 0; i < n; i++)
+    for (std::size_t i = 0; i < n; ++i)
     {
         const uint64_t x =
             (mt[i] & upper_mask) + (mt[(i + 1) % n] & lower_mask);

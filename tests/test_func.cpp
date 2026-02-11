@@ -13,20 +13,19 @@ TEST_CASE("Colors", "[colors]")
     bmi.bmiHeader.biPlanes = 1;
     bmi.bmiHeader.biBitCount = 32;
     bmi.bmiHeader.biCompression = BI_RGB;
-    void* bits = nullptr;
+    void *bits = nullptr;
     const HDC hdc = ::GetDC(nullptr);
-    const HBITMAP hBitmap = ::CreateDIBSection(
-        hdc, &bmi, DIB_RGB_COLORS, &bits, nullptr, 0);
+    const HBITMAP hBitmap =
+        ::CreateDIBSection(hdc, &bmi, DIB_RGB_COLORS, &bits, nullptr, 0);
     static_cast<void>(::ReleaseDC(nullptr, hdc));
     // BGRA
-    auto* const pixels = static_cast<uint8_t* const>(bits);
+    auto *const pixels = static_cast<uint8_t *const>(bits);
     pixels[0] = 0x00; // B
     pixels[1] = 0x00; // G
     pixels[2] = 0xFF; // R
     pixels[3] = 0xFF; // A
     const sf::Image image = segment01::Func::hBITMAPToImage(hBitmap);
     REQUIRE(image.getSize() == sf::Vector2<uint32_t>(200, 200));
-
 
     REQUIRE(segment01::Func::colorBalance(sf::Color(0, 0, 0, 255),
                                           sf::Color(255, 255, 255, 255), 0.5) ==
@@ -35,6 +34,13 @@ TEST_CASE("Colors", "[colors]")
                 sf::Color(0, 0, 0, 255), sf::Color(255, 255, 255, 255)) ==
             195'075);
 
+    REQUIRE(segment01::Func::getKeyWordLine("error") == "");
+    REQUIRE(segment01::Func::getKeyWordLine("key=value") == "key");
     REQUIRE(segment01::Func::getKeyWordLine(U"error") == U"");
     REQUIRE(segment01::Func::getKeyWordLine(U"key=value") == U"key");
+
+    const std::array<std::string, 3> fontExtensions = {
+        {".ttf", ".otf", ".woff"}};
+    REQUIRE(segment01::Func::hasSuffixInList("font.otf", fontExtensions.begin(),
+                                              fontExtensions.end()));
 }
