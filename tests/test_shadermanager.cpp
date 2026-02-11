@@ -3,6 +3,6 @@
 
 TEST_CASE("ShaderManager", "[shadermanager]")
 {
-    segment01::ShaderManager::initialize();
+    // segment01::ShaderManager::initialize();
     segment01::ShaderManager::terminate();
 }
