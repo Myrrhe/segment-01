@@ -99,7 +99,7 @@ jobs:
       # 9
       - name: Generate coverage report
         run: |
-          gcovr -r . --sonarqube coverage.xml
+          gcovr -r . --sonarqube --exclude-throw-branches coverage.xml
       # 10
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
