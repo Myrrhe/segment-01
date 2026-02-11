@@ -4,7 +4,7 @@
 
 TEST_CASE("PathManager", "[pathmanager]")
 {
-    segment01::PathManager::setPath("build/debug.exe");
+//     segment01::PathManager::setPath("build/debug.exe");
     REQUIRE(segment01::PathManager::getPath(
                 segment01::PathManager::Dir::ROOT) == "");
     REQUIRE(segment01::PathManager::getPath(segment01::PathManager::Dir::DAT) ==
