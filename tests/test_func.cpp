@@ -39,6 +39,11 @@ TEST_CASE("Func", "[func]")
     REQUIRE(segment01::Func::getDir("error").size() == 0);
     segment01::Logger::setLevel(segment01::LogLevel::INFO);
     REQUIRE(segment01::Func::getDir(".").size() > 0);
+    const std::vector<std::string> dirContent = segment01::Func::getDir(".");
+    for (std::size_t i = 0; i < dirContent.size(); ++i)
+    {
+        std::cout << dirContent[i] << std::endl;
+    }
     // REQUIRE(segment01::Func::fileExist("tests.exe"));
 
     REQUIRE(segment01::Func::getKeyWordLine("error") == "");

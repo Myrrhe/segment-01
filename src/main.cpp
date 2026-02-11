@@ -3,9 +3,10 @@
 #include <iostream>
 #include <windows.h>
 
-int main(int /*argc*/, char ** /*argv*/, char ** /*options*/)
+int main(int /*argc*/, char ** argv, char ** /*options*/)
 {
     segment01::Logger().info("aaa");
+    segment01::Logger().info(argv[0]);
 #ifdef _DEBUG
     std::cout << "Mode Debug, logs visibles dans la console\n";
 #else
