@@ -26,7 +26,7 @@ TEST_CASE("PathManager", "[pathmanager]")
     REQUIRE(segment01::PathManager::getPath(
                 segment01::PathManager::Dir::SCREENSHOT) ==
             "assets\\screenshot");
-    segment01::Logger::setLevel(segment01::LogLevel::NONE);
-    segment01::PathManager::read();
-    segment01::Logger::setLevel(segment01::LogLevel::INFO);
+//     segment01::Logger::setLevel(segment01::LogLevel::NONE);
+//     segment01::PathManager::read();
+//     segment01::Logger::setLevel(segment01::LogLevel::INFO);
 }
