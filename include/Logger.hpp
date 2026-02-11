@@ -66,7 +66,6 @@ public:
                 oss << "[ERRORS] ";
                 break;
             case LogLevel::WARNING:
-                throw std::runtime_error("Crash");
                 oss << "[WARNING] ";
                 break;
             case LogLevel::NONE:
