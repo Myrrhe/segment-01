@@ -52,7 +52,7 @@ public:
     template <typename... Args>
     Logger &logging(const LogLevel level, const Args &...args)
     {
-        if (/*level >= s_level.load(std::memory_order_relaxed)*/ true)
+        if (level >= s_level.load(std::memory_order_relaxed))
         {
             const std::scoped_lock lock(m_mtx);
             std::ostringstream oss;
@@ -66,6 +66,7 @@ public:
                 oss << "[ERRORS] ";
                 break;
             case LogLevel::WARNING:
+                throw std::runtime_error("Crash");
                 oss << "[WARNING] ";
                 break;
             case LogLevel::NONE:
