@@ -35,7 +35,8 @@ public:
     static void initialize();
     static void terminate();
 
-    static sf::Shader& getShader(const std::string& key);
+    static sf::Shader &getShader(const std::string &key);
+
 private:
     static std::map<std::string, sf::Shader, std::less<>> shaders;
 };

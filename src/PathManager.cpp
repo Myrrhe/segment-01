@@ -145,10 +145,11 @@ void PathManager::read()
     pathFile.close();
     if (!keyFound)
     {
-        Logger().info("Error: " + path + exeName + PathExtension +
-                      " exist, but the line \'path=[something]\' was not "
-                      "found. The deletion of the file so it can be "
-                      "rewritten is suggested.");
+        static_cast<void>(
+            Logger().info("Error: " + path + exeName + PathExtension +
+                          " exist, but the line \'path=[something]\' was not "
+                          "found. The deletion of the file so it can be "
+                          "rewritten is suggested."));
     }
 }
 
@@ -156,9 +157,10 @@ void PathManager::initialize()
 {
     if (!Func::fileExist(path + exeName + PathExtension))
     {
-        Logger().info("Error: " + path + exeName + PathExtension +
-                      " missing. Therefore, the file has been rewritten "
-                      "from scratch.");
+        static_cast<void>(
+            Logger().info("Error: " + path + exeName + PathExtension +
+                          " missing. Therefore, the file has been rewritten "
+                          "from scratch."));
         rewrite();
     }
     read();

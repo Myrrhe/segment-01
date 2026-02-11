@@ -35,10 +35,10 @@ public:
                     const uint32_t newRefreshRate,
                     const sf::Vector2<uint32_t> &newDpi);
     ScreenConnected(const ScreenConnected &right);
-    ~ScreenConnected();
-    ScreenConnected &operator=(const ScreenConnected &right);
     ScreenConnected(ScreenConnected &&right) noexcept;
-    ScreenConnected& operator=(ScreenConnected &&right) noexcept;
+    ScreenConnected &operator=(const ScreenConnected &right);
+    ScreenConnected &operator=(ScreenConnected &&right) noexcept;
+    ~ScreenConnected();
 
     static void initialize();
     static void deleteAll();

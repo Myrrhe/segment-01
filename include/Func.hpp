@@ -53,9 +53,9 @@ public:
 
     static std::u32string getKeyWordLine(const std::u32string_view &line);
 
-    [[gnu::pure]] static bool hasSuffixInList(const std::string_view &str,
-                                              const std::string *const begin,
-                                              const std::string *const end);
+    [[nodiscard]] [[gnu::pure]] static bool
+    hasSuffixInList(const std::string_view &str, const std::string *const begin,
+                    const std::string *const end);
 };
 
 } // namespace segment01

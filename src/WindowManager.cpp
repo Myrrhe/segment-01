@@ -80,8 +80,9 @@ void WindowManager::create()
 void WindowManager::initialize()
 {
     textureIcon = std::make_unique<sf::Texture>();
-    Logger().info(PathManager::getPath(PathManager::Dir::IMG) +
-                  OsManager::Slash + OsManager::StrIcon);
+    static_cast<void>(
+        Logger().info(PathManager::getPath(PathManager::Dir::IMG) +
+                      OsManager::Slash + OsManager::StrIcon));
     if (textureIcon->loadFromFile(PathManager::getPath(PathManager::Dir::IMG) +
                                   OsManager::Slash + OsManager::StrIcon))
     {

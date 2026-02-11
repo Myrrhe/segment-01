@@ -25,44 +25,46 @@ namespace segment01
 uint64_t Input::joystickSensitivity;
 
 Input::Input()
-    : typeInput(TypeInput::ERROR_TYPE_INPUT),
-      key(sf::Keyboard::Key::Unknown),
-      button(sf::Mouse::Button::Left),
-      axis(sf::Joystick::Axis::X),
-      buttonJoystick(0),
-      idJoystick(0),
-      signAxis(false)
+    : typeInput(TypeInput::ERROR_TYPE_INPUT), key(sf::Keyboard::Key::Unknown),
+      button(sf::Mouse::Button::Left), axis(sf::Joystick::Axis::X),
+      buttonJoystick(0), idJoystick(0), signAxis(false)
 {
 }
 
 Input::Input(const sf::Keyboard::Key &newKey)
-    : typeInput(TypeInput::KEYBOARD), key(newKey), button(sf::Mouse::Button::Left), axis(sf::Joystick::Axis::X),
+    : typeInput(TypeInput::KEYBOARD), key(newKey),
+      button(sf::Mouse::Button::Left), axis(sf::Joystick::Axis::X),
       buttonJoystick(0), idJoystick(0), signAxis(false)
 {
 }
 
 Input::Input(const sf::Mouse::Button &newButton)
-    : typeInput(TypeInput::MOUSE), key(sf::Keyboard::Key::Unknown), button(newButton), axis(sf::Joystick::Axis::X),
-      buttonJoystick(0), idJoystick(0), signAxis(false)
+    : typeInput(TypeInput::MOUSE), key(sf::Keyboard::Key::Unknown),
+      button(newButton), axis(sf::Joystick::Axis::X), buttonJoystick(0),
+      idJoystick(0), signAxis(false)
 {
 }
 
 Input::Input(const sf::Joystick::Axis &newAxis, const uint32_t newIdJoystick,
              const bool newSignAxis)
-    : typeInput(TypeInput::JOYSTICK_AXIS), key(sf::Keyboard::Key::Unknown), button(sf::Mouse::Button::Left), axis(newAxis),
-      buttonJoystick(), idJoystick(newIdJoystick), signAxis(newSignAxis)
+    : typeInput(TypeInput::JOYSTICK_AXIS), key(sf::Keyboard::Key::Unknown),
+      button(sf::Mouse::Button::Left), axis(newAxis), buttonJoystick(),
+      idJoystick(newIdJoystick), signAxis(newSignAxis)
 {
 }
 
 Input::Input(const uint32_t newButtonJoystick, const uint32_t newIdJoystick)
-    : typeInput(TypeInput::JOYSTICK), key(sf::Keyboard::Key::Unknown), button(sf::Mouse::Button::Left), axis(sf::Joystick::Axis::X),
-      buttonJoystick(newButtonJoystick), idJoystick(newIdJoystick), signAxis(false)
+    : typeInput(TypeInput::JOYSTICK), key(sf::Keyboard::Key::Unknown),
+      button(sf::Mouse::Button::Left), axis(sf::Joystick::Axis::X),
+      buttonJoystick(newButtonJoystick), idJoystick(newIdJoystick),
+      signAxis(false)
 {
 }
 
 Input::Input(const std::string_view &str)
-    : typeInput(TypeInput::ERROR_TYPE_INPUT), key(sf::Keyboard::Key::Unknown), button(sf::Mouse::Button::Left), axis(sf::Joystick::Axis::X), buttonJoystick(0), idJoystick(0),
-      signAxis(false)
+    : typeInput(TypeInput::ERROR_TYPE_INPUT), key(sf::Keyboard::Key::Unknown),
+      button(sf::Mouse::Button::Left), axis(sf::Joystick::Axis::X),
+      buttonJoystick(0), idJoystick(0), signAxis(false)
 {
     typeInput = TypeInput::ERROR_TYPE_INPUT;
     if (str == "A")
@@ -753,11 +755,11 @@ Input::Input(const Input &input) noexcept
 {
 }
 
-Input &Input::operator=(const Input &input) = default;
-
 Input::Input(Input &&input) noexcept = default;
 
-Input& Input::operator=(Input &&input) noexcept = default;
+Input &Input::operator=(const Input &input) = default;
+
+Input &Input::operator=(Input &&input) noexcept = default;
 
 Input::~Input() = default;
 
@@ -1323,7 +1325,7 @@ void Input::setJoystickSensitivity(const uint64_t newJoystickSensitivity)
 void Input::initialize()
 {
     // Useful ?
-    joystickSensitivity = 50;
+    joystickSensitivity = DefaultJoystickSensitivity;
 }
 
 uint64_t operator|(const Input::InputFl &inputFl1,

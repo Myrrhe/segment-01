@@ -19,11 +19,12 @@
 
 #ifndef MOUSEWHEEL_HPP
 #define MOUSEWHEEL_HPP
-#include <cstdint>
 #include "StaticObject.hpp"
 #include "Types.hpp"
+#include <cstdint>
 
-namespace segment01 {
+namespace segment01
+{
 
 class MouseWheel final : public StaticObject
 {

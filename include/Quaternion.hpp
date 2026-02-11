@@ -36,15 +36,15 @@ public:
     Quaternion(const std::complex<float64_t> newXY,
                const std::complex<float64_t> newZT);
     Quaternion(const Quaternion &newXYZT);
-    ~Quaternion();
-    Quaternion &operator=(const Quaternion &right);
     Quaternion(Quaternion &&right) noexcept;
-    Quaternion& operator=(Quaternion &&right) noexcept;
+    Quaternion &operator=(const Quaternion &right);
+    Quaternion &operator=(Quaternion &&right) noexcept;
+    ~Quaternion();
     // std::partial_ordering operator<=>(const Quaternion& right) const;
     [[gnu::const]] const float64_t &operator[](const std::size_t i) const;
     float64_t &operator[](const std::size_t i);
     Quaternion &operator++();
-    Quaternion operator++(int32_t);
+    Quaternion operator++(const int32_t);
     Quaternion &operator--();
     Quaternion operator--(const int32_t);
     Quaternion &operator+=(const Quaternion &right);
@@ -98,10 +98,7 @@ private:
 
     friend bool operator!=(const Quaternion &left, const Quaternion &right)
     {
-        return ((std::abs(left.x - right.x) > epsilon) ||
-                (std::abs(left.y - right.y) > epsilon) ||
-                (std::abs(left.z - right.z) > epsilon) ||
-                (std::abs(left.t - right.t) > epsilon));
+        return !(left == right);
     }
 
     friend bool operator>(const Quaternion &left, const Quaternion &right)

@@ -21,6 +21,7 @@
 #define CONSTANT_HPP
 #include "StaticObject.hpp"
 #include "Types.hpp"
+#include <cstdint>
 
 namespace segment01
 {

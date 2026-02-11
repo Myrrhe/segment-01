@@ -22,7 +22,7 @@
 namespace segment01
 {
 Logger::Logger() : m_mtx(), m_output(std::cout) {}
-Logger::Logger(std::ostream& out) : m_mtx(), m_output(out) {}
+Logger::Logger(std::ostream &out) : m_mtx(), m_output(out) {}
 
 std::string Logger::getCurrentTime() const
 {

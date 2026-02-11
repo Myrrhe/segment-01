@@ -33,9 +33,10 @@ class FontManager final : public StaticObject
 {
 public:
     static void initialize();
-    static const sf::Font* getFont(const std::string& str);
+    static const sf::Font *getFont(const std::string &str);
 
     static const std::array<std::string, 2> fontExtensions;
+
 private:
     static std::unordered_map<std::string, sf::Font> fonts;
 };

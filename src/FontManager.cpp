@@ -48,7 +48,8 @@ void FontManager::initialize()
             }
             else
             {
-                Logger().info("Error loading font: " + allFont[i]);
+                static_cast<void>(
+                    Logger().info("Error loading font: " + allFont[i]));
             }
         }
     }

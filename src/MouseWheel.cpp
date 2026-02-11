@@ -19,19 +19,14 @@
 
 #include "MouseWheel.hpp"
 
-namespace segment01 {
+namespace segment01
+{
 
 float32_t MouseWheel::deltaWheel;
 
-void MouseWheel::initialize()
-{
-    deltaWheel = 0;
-}
+void MouseWheel::initialize() { deltaWheel = 0; }
 
-float32_t MouseWheel::getDeltaWheel()
-{
-    return deltaWheel;
-}
+float32_t MouseWheel::getDeltaWheel() { return deltaWheel; }
 
 void MouseWheel::setDeltaWheel(const float32_t newDeltaWheel)
 {

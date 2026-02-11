@@ -70,8 +70,8 @@ void ShaderManager::initialize()
         {
             if (!shaders[name].loadFromFile(vertexPath, fragmentPath))
             {
-                Logger()
-                    .info("Failed to load combined shader: " + name);
+                static_cast<void>(
+                    Logger().info("Failed to load combined shader: " + name));
             }
         }
         else if (!vertexPath.empty())
@@ -79,8 +79,8 @@ void ShaderManager::initialize()
             if (!shaders[name].loadFromFile(vertexPath,
                                             sf::Shader::Type::Vertex))
             {
-                Logger()
-                    .info("Failed to load vertex shader: " + name);
+                static_cast<void>(
+                    Logger().info("Failed to load vertex shader: " + name));
             }
         }
         else if (!fragmentPath.empty())
@@ -88,8 +88,8 @@ void ShaderManager::initialize()
             if (!shaders[name].loadFromFile(fragmentPath,
                                             sf::Shader::Type::Fragment))
             {
-                Logger()
-                    .info("Failed to load fragment shader: " + name);
+                static_cast<void>(
+                    Logger().info("Failed to load fragment shader: " + name));
             }
         }
         else

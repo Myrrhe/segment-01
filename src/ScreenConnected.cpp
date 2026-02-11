@@ -38,15 +38,14 @@ ScreenConnected::ScreenConnected(const std::wstring &newName,
 }
 
 ScreenConnected::ScreenConnected(const ScreenConnected &right) = default;
-
-ScreenConnected::~ScreenConnected() = default;
+ScreenConnected::ScreenConnected(ScreenConnected &&right) noexcept = default;
 
 ScreenConnected &
 ScreenConnected::operator=(const ScreenConnected &right) = default;
-
-ScreenConnected::ScreenConnected(ScreenConnected &&right) noexcept = default;
 ScreenConnected &
 ScreenConnected::operator=(ScreenConnected &&right) noexcept = default;
+
+ScreenConnected::~ScreenConnected() = default;
 
 void ScreenConnected::initialize()
 {

@@ -24,7 +24,6 @@
 #include <iostream>
 #include <istream>
 
-
 namespace segment01
 {
 
@@ -63,9 +62,9 @@ public:
                    const uint32_t newIdJoystick);
     explicit Input(const std::string_view &str);
     Input(const Input &input) noexcept;
-    Input &operator=(const Input &input);
     Input(Input &&input) noexcept;
-    Input& operator=(Input &&input) noexcept;
+    Input &operator=(const Input &input);
+    Input &operator=(Input &&input) noexcept;
     ~Input();
     std::string toString() const;
     bool isPressed() const;
@@ -80,6 +79,8 @@ public:
     static void initialize();
     [[nodiscard]] [[gnu::pure]] static uint64_t getJoystickSensitivity();
     static void setJoystickSensitivity(const uint64_t newJoystickSensitivity);
+
+    static constexpr uint64_t DefaultJoystickSensitivity = 50;
 
 private:
     TypeInput typeInput;

@@ -18,15 +18,14 @@
  */
 
 #include "Mt19937_64.hpp"
-
 namespace segment01
 {
-
+Mt19937_64::Mt19937_64() : mt(), index(0) { seed(Mt19937_64::DefaultSeed); }
 Mt19937_64::Mt19937_64(const uint64_t s) : mt(), index(0) { seed(s); }
 
 Mt19937_64::Mt19937_64(const Mt19937_64 &right) = default;
-Mt19937_64 &Mt19937_64::operator=(const Mt19937_64 &right) = default;
 Mt19937_64::Mt19937_64(Mt19937_64 &&right) noexcept = default;
+Mt19937_64 &Mt19937_64::operator=(const Mt19937_64 &right) = default;
 Mt19937_64 &Mt19937_64::operator=(Mt19937_64 &&right) noexcept = default;
 Mt19937_64::~Mt19937_64() = default;
 
@@ -46,7 +45,7 @@ uint64_t Mt19937_64::operator()()
     {
         twist();
     }
-    index++;
+    ++index;
     uint64_t x = mt[index];
     // Tempering
     x ^= (x >> 29) & 0x5555555555555555ULL;
@@ -60,7 +59,8 @@ void Mt19937_64::twist()
 {
     for (std::size_t i = 0; i < n; i++)
     {
-        uint64_t x = (mt[i] & upper_mask) + (mt[(i + 1) % n] & lower_mask);
+        const uint64_t x =
+            (mt[i] & upper_mask) + (mt[(i + 1) % n] & lower_mask);
         uint64_t xA = x >> 1;
         if (x % 2 != 0)
         {

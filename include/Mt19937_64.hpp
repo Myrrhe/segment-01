@@ -19,13 +19,15 @@
 
 #ifndef MT1993764_HPP
 #define MT1993764_HPP
-#include <cstdint>
 #include <array>
+#include <cstdint>
 #include <iostream>
 
-namespace segment01 {
+namespace segment01
+{
 
-class Mt19937_64 {
+class Mt19937_64
+{
 public:
     static constexpr std::size_t n = 312;
     static constexpr std::size_t m = 156;
@@ -33,20 +35,21 @@ public:
     static constexpr uint64_t upper_mask = 0xFFFFFFFF80000000ULL;
     static constexpr uint64_t lower_mask = 0x7FFFFFFFULL;
 
-    explicit Mt19937_64(const uint64_t s = 5489ULL);
+    explicit Mt19937_64();
+    explicit Mt19937_64(const uint64_t s);
     Mt19937_64(const Mt19937_64 &right);
-    Mt19937_64 &operator=(const Mt19937_64 &right);
     Mt19937_64(Mt19937_64 &&right) noexcept;
-    Mt19937_64& operator=(Mt19937_64 &&right) noexcept;
+    Mt19937_64 &operator=(const Mt19937_64 &right);
+    Mt19937_64 &operator=(Mt19937_64 &&right) noexcept;
     ~Mt19937_64();
 
     void seed(const uint64_t s);
 
     uint64_t operator()();
 
-    static constexpr uint64_t max() {
-        return UINT64_MAX;
-    }
+    [[nodiscard]] static constexpr uint64_t max() { return UINT64_MAX; }
+
+    static constexpr uint64_t DefaultSeed = 5489ULL;
 
 private:
     std::array<uint64_t, n> mt;

@@ -39,13 +39,13 @@ Quaternion::Quaternion(const std::complex<float64_t> newXY,
 
 Quaternion::Quaternion(const Quaternion &newXYZT) = default;
 
-Quaternion::~Quaternion() = default;
+Quaternion::Quaternion(Quaternion &&right) noexcept = default;
 
 Quaternion &Quaternion::operator=(const Quaternion &right) = default;
 
-Quaternion::Quaternion(Quaternion &&right) noexcept = default;
+Quaternion &Quaternion::operator=(Quaternion &&right) noexcept = default;
 
-Quaternion& Quaternion::operator=(Quaternion &&right) noexcept = default;
+Quaternion::~Quaternion() = default;
 
 /*
 std::partial_ordering Quaternion::operator<=>(const Quaternion& right) const
@@ -128,7 +128,7 @@ Quaternion &Quaternion::operator++()
     return *this;
 }
 
-Quaternion Quaternion::operator++(int32_t)
+Quaternion Quaternion::operator++(const int32_t)
 {
     const Quaternion res(*this);
     ++(*this);
@@ -207,7 +207,7 @@ Quaternion Quaternion::getConjugation() const
 Quaternion Quaternion::getReciprocal() const
 {
     const float64_t divisor = (x * x) + (y * y) + (z * z) + (t * t);
-    return Quaternion(x / divisor, - y / divisor, - z / divisor, - t / divisor);
+    return Quaternion(x / divisor, -y / divisor, -z / divisor, -t / divisor);
 }
 
 Quaternion &Quaternion::setNorm(const float64_t newNorm)

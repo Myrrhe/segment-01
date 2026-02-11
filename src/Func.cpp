@@ -18,6 +18,7 @@
  */
 
 #include "Func.hpp"
+#include "Logger.hpp"
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -128,7 +129,7 @@ std::vector<std::string> Func::getDir(const std::string &dir)
     dirent const *dirp = nullptr;
     if (nullptr == (dp = ::opendir(dir.c_str())))
     {
-        std::cout << "Error opening " << dir << "\n";
+        static_cast<void>(Logger().info("Error opening " + dir));
     }
     else
     {
@@ -139,7 +140,7 @@ std::vector<std::string> Func::getDir(const std::string &dir)
         const int32_t err = ::closedir(dp);
         if (-1 == err)
         {
-            std::cout << "Error closing " << dir << "\n";
+            static_cast<void>(Logger().info("Error closing " + dir));
         }
     }
     return res;

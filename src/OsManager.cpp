@@ -34,9 +34,9 @@
 #include <unistd.h>
 
 #elif _WIN32
-#include <windows.h>
 #include <direct.h>
 #include <psapi.h>
+#include <windows.h>
 #include <winnt.h>
 #include <wtypes.h> // Need to be put before psapi.h
 
@@ -86,25 +86,34 @@ int64_t OsManager::getWallpaperStyle()
 #ifdef __linux__
 #elif _WIN32
     HKEY hKey = nullptr;
+    int64_t res = 0;
     if (::RegOpenKeyExA(HKEY_CURRENT_USER, "Control Panel\\Desktop", 0,
                         KEY_READ, &hKey) != ERROR_SUCCESS)
     {
-        return -1;
+        res = -1;
     }
 
     std::string value(16, '\0');
     DWORD valueLength = sizeof(value);
-    if (::RegQueryValueExA(hKey, "WallpaperStyle", nullptr, nullptr,
+    if (res != -1 &&
+        ::RegQueryValueExA(hKey, "WallpaperStyle", nullptr, nullptr,
                            reinterpret_cast<LPBYTE>(value.data()),
                            &valueLength) != ERROR_SUCCESS)
     {
-        ::RegCloseKey(hKey);
-        return -1;
+        static_cast<void>(::RegCloseKey(hKey));
+        res = -1;
     }
 
-    ::RegCloseKey(hKey);
+    if (::RegCloseKey(hKey) != ERROR_SUCCESS)
+    {
+        res = -1;
+    }
     // Remove null terminator
-    return std::stol(std::string(value.data(), valueLength - 1));
+    if (res != -1)
+    {
+        res = std::stol(std::string(value.data(), valueLength - 1));
+    }
+    return res;
 #elif _OSX
 #endif // __linux__
 }
