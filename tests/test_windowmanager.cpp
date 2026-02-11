@@ -3,6 +3,7 @@
 
 TEST_CASE("Windowmanager", "[windowmanager]")
 {
+    segment01::WindowManager::getMonitorSize();
     REQUIRE(segment01::WindowManager::getRenderWindow() == nullptr);
     segment01::WindowManager::setUiView(0, 0, 200, 200);
     segment01::WindowManager::setOffsetX(0);
@@ -35,4 +36,7 @@ TEST_CASE("Windowmanager", "[windowmanager]")
         segment01::WindowManager::IdView::WHOLE);
     segment01::WindowManager::setViewTarget(renderTexture);
     segment01::WindowManager::popStateView();
+
+    REQUIRE(segment01::WindowManager::getCharEntered() == 0);
+    REQUIRE(segment01::WindowManager::getKeyPressed() == sf::Keyboard::Key::A);
 }
