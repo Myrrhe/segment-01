@@ -21,6 +21,8 @@
 
 namespace segment01
 {
+std::atomic<LogLevel> Logger::s_level{LogLevel::INFO};
+
 Logger::Logger() : m_mtx(), m_output(std::cout) {}
 Logger::Logger(std::ostream &out) : m_mtx(), m_output(out) {}
 
@@ -37,5 +39,10 @@ std::string Logger::getCurrentTime() const
 }
 
 Logger::~Logger() = default;
+
+void Logger::setLevel(const LogLevel level)
+{
+    s_level.store(level, std::memory_order_relaxed);
+}
 
 } // namespace segment01

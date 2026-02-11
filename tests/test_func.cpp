@@ -1,4 +1,5 @@
 #include "Func.hpp"
+#include "Logger.hpp"
 #include <catch2/catch_test_macros.hpp>
 
 TEST_CASE("Colors", "[colors]")
@@ -34,6 +35,12 @@ TEST_CASE("Colors", "[colors]")
                 sf::Color(0, 0, 0, 255), sf::Color(255, 255, 255, 255)) ==
             195'075);
 
+    segment01::Logger::setLevel(segment01::LogLevel::NONE);
+    REQUIRE(segment01::Func::getDir("error").size() == 0);
+    segment01::Logger::setLevel(segment01::LogLevel::INFO);
+    REQUIRE(segment01::Func::getDir(".").size() > 0);
+    REQUIRE(segment01::Func::fileExist("tests.exe"));
+
     REQUIRE(segment01::Func::getKeyWordLine("error") == "");
     REQUIRE(segment01::Func::getKeyWordLine("key=value") == "key");
     REQUIRE(segment01::Func::getKeyWordLine(U"error") == U"");
@@ -42,5 +49,7 @@ TEST_CASE("Colors", "[colors]")
     const std::array<std::string, 3> fontExtensions = {
         {".ttf", ".otf", ".woff"}};
     REQUIRE(segment01::Func::hasSuffixInList("font.otf", fontExtensions.begin(),
-                                              fontExtensions.end()));
+                                             fontExtensions.end()));
+    REQUIRE(!segment01::Func::hasSuffixInList(
+        "font.woff2", fontExtensions.begin(), fontExtensions.end()));
 }

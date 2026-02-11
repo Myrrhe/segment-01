@@ -20,6 +20,7 @@
 #ifndef LOGGER_HPP
 #define LOGGER_HPP
 
+#include <atomic>
 #include <chrono>
 #include <iomanip>
 #include <iostream>
@@ -32,7 +33,8 @@ enum class LogLevel : uint64_t
 {
     INFO,
     ERRORS,
-    WARNING
+    WARNING,
+    NONE,
 };
 
 class Logger final
@@ -50,33 +52,43 @@ public:
     template <typename... Args>
     Logger &logging(const LogLevel level, const Args &...args)
     {
-        const std::scoped_lock lock(m_mtx);
-        std::ostringstream oss;
-
-        switch (level)
+        if (level >= s_level.load(std::memory_order_relaxed))
         {
-        case LogLevel::INFO:
-            oss << "[INFO] ";
-            break;
-        case LogLevel::ERRORS:
-            oss << "[ERRORS] ";
-            break;
-        case LogLevel::WARNING:
-            oss << "[WARNING] ";
-            break;
-        default:
-            break;
-        }
+            const std::scoped_lock lock(m_mtx);
+            std::ostringstream oss;
 
-        oss << getCurrentTime() << " - ";
-        (oss << ... << args);
-        m_output << oss.str() << '\n';
+            switch (level)
+            {
+            case LogLevel::INFO:
+                oss << "[INFO] ";
+                break;
+            case LogLevel::ERRORS:
+                oss << "[ERRORS] ";
+                break;
+            case LogLevel::WARNING:
+                oss << "[WARNING] ";
+                break;
+            case LogLevel::NONE:
+                oss << "[NONE] ";
+                break;
+            default:
+                break;
+            }
+
+            oss << getCurrentTime() << " - ";
+            (oss << ... << args);
+            m_output << oss.str() << '\n';
+        }
         return *this;
     }
+
+    static void setLevel(const LogLevel level);
 
 private:
     std::mutex m_mtx;
     std::ostream &m_output;
+
+    static std::atomic<LogLevel> s_level;
 
     std::string getCurrentTime() const;
 };

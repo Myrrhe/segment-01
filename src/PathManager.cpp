@@ -30,7 +30,7 @@ std::string PathManager::path;
 std::string PathManager::pathVar;
 std::string PathManager::exeName;
 
-const std::string PathManager::PathName = "chrono";
+const std::string PathManager::PathName = "segment-01";
 const std::string PathManager::PathExtension = ".ini";
 
 const std::string PathManager::FolderDat = "assets";
