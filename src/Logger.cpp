@@ -45,4 +45,9 @@ void Logger::setLevel(const LogLevel level)
     s_level.store(level, std::memory_order_relaxed);
 }
 
+LogLevel Logger::getLevel()
+{
+    return s_level.load(std::memory_order_relaxed);
+}
+
 } // namespace segment01

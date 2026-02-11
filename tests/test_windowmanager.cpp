@@ -3,6 +3,8 @@
 
 TEST_CASE("Windowmanager", "[windowmanager]")
 {
+    REQUIRE(segment01::WindowManager::getRenderWindow() == nullptr);
+    segment01::WindowManager::setUiView(0, 0, 200, 200);
     segment01::WindowManager::setOffsetX(0);
     segment01::WindowManager::setOffsetY(0);
     REQUIRE(!segment01::WindowManager::isTextEntered());

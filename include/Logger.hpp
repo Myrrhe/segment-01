@@ -83,6 +83,7 @@ public:
     }
 
     static void setLevel(const LogLevel level);
+    static LogLevel getLevel();
 
 private:
     std::mutex m_mtx;
