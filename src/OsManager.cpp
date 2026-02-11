@@ -117,4 +117,13 @@ int64_t OsManager::getWallpaperStyle()
 #elif _OSX
 #endif // __linux__
 }
+
+void OsManager::setProcessDPIAware()
+{
+#ifdef __linux__
+#elif _WIN32
+    static_cast<void>(::SetProcessDPIAware());
+#elif _OSX
+#endif // __linux__
+}
 } // namespace segment01

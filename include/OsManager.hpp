@@ -51,6 +51,7 @@ class OsManager final : public StaticObject
 public:
     static sf::Vector2<uint64_t> getMonitorSize();
     [[nodiscard]] static int64_t getWallpaperStyle();
+    static void setProcessDPIAware();
 
     static const char SlashC;
     static const std::string Slash;
