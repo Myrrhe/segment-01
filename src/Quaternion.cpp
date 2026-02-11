@@ -1,21 +1,21 @@
-/*
- * <one line to give the library's name and an idea of what it does.>
- * Copyright (C) 2017  <copyright holder> <email>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- */
+////////////////////////////////////////////////////////////
+// A basic function library.
+// Copyright (C) 2026  Myrrhe <email>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+////////////////////////////////////////////////////////////
 
 #include "Quaternion.hpp"
 #include <cmath>
@@ -46,31 +46,6 @@ Quaternion &Quaternion::operator=(const Quaternion &right) = default;
 Quaternion &Quaternion::operator=(Quaternion &&right) noexcept = default;
 
 Quaternion::~Quaternion() = default;
-
-/*
-std::partial_ordering Quaternion::operator<=>(const Quaternion& right) const
-{
-    if (x < right.x && y < right.y && z < right.z && t < right.t)
-    {
-        return std::partial_ordering::less;
-    }
-    else if (x > right.x && y > right.y && z > right.z && t > right.t)
-    {
-        return std::partial_ordering::greater;
-    }
-    else if (std::abs(x - right.x) <= epsilon
-          && std::abs(y - right.y) <= epsilon
-          && std::abs(z - right.z) <= epsilon
-          && std::abs(t - right.t) <= epsilon)
-    {
-        return std::partial_ordering::equivalent;
-    }
-    else
-    {
-        return std::partial_ordering::unordered;
-    }
-}
-*/
 
 const float64_t &Quaternion::operator[](const std::size_t i) const
 {
