@@ -15,6 +15,12 @@ TEST_CASE("Input", "[input]")
             sf::Joystick::Axis::X);
     REQUIRE(segment01::Input(0, 0).getTypeInput() ==
             segment01::Input::TypeInput::JOYSTICK);
+    auto i1 = segment01::Input(sf::Keyboard::Key::A);
+    segment01::Input i2(i1);
+    segment01::Input i3 = i2;
+    segment01::Input i4 = std::move(i3);
+    i1 = i4;
+    i2 = std::move(i4);
 
     REQUIRE(segment01::Input("A").getKey() == sf::Keyboard::Key::A);
     REQUIRE(segment01::Input("B").getKey() == sf::Keyboard::Key::B);
@@ -164,9 +170,6 @@ TEST_CASE("Input", "[input]")
 
     REQUIRE(segment01::Input(segment01::Input()).getTypeInput() ==
             segment01::Input::TypeInput::ERROR_TYPE_INPUT);
-    auto i1 = segment01::Input(sf::Keyboard::Key::A);
-    i1 = segment01::Input(sf::Keyboard::Key::B);
-    REQUIRE(i1.getKey() == sf::Keyboard::Key::B);
 
     REQUIRE(segment01::Input(sf::Keyboard::Key::A).toString() == "A");
     REQUIRE(segment01::Input(sf::Keyboard::Key::B).toString() == "B");
