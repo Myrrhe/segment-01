@@ -71,4 +71,18 @@ TEST_CASE("Func", "[func]")
                                              fontExtensions.end()));
     REQUIRE(!segment01::Func::hasSuffixInList(
         "font.woff2", fontExtensions.begin(), fontExtensions.end()));
+
+    REQUIRE(!segment01::Func::isPosInt(""));
+    REQUIRE(!segment01::Func::isPosInt("-"));
+    REQUIRE(segment01::Func::isPosInt("1"));
+    REQUIRE(!segment01::Func::isPosInt("1.2"));
+    REQUIRE(!segment01::Func::isPosInt("1,2"));
+    REQUIRE(!segment01::Func::isPosInt("-1"));
+
+    REQUIRE(!segment01::Func::isPosInt(U""));
+    REQUIRE(!segment01::Func::isPosInt(U"-"));
+    REQUIRE(segment01::Func::isPosInt(U"1"));
+    REQUIRE(!segment01::Func::isPosInt(U"1.2"));
+    REQUIRE(!segment01::Func::isPosInt(U"1,2"));
+    REQUIRE(!segment01::Func::isPosInt(U"-1"));
 }

@@ -135,7 +135,8 @@ std::vector<std::string> Func::getDir(const std::string &dir)
     {
         while ((dirp = ::readdir(dp)) != nullptr)
         {
-            (void)res.emplace_back(static_cast<std::string>(dirp->d_name));
+            static_cast<void>(
+                res.emplace_back(static_cast<std::string>(dirp->d_name)));
         }
         const int32_t err = ::closedir(dp);
         if (-1 == err)
@@ -150,6 +151,187 @@ bool Func::fileExist(const std::string &path)
 {
     const std::ifstream infile(path);
     return infile.good();
+}
+
+bool Func::isFloat(const std::string &s)
+{
+    std::basic_istringstream<char, std::char_traits<char>, std::allocator<char>>
+        iss(s);
+    float32_t f = 0;
+    iss >> std::noskipws >> f;
+    // noskipws considers leading whitespace invalid
+    // Check the entire string was consumed and if either failbit or badbit is
+    // set
+    return iss.eof() && (!iss.fail());
+}
+
+bool Func::isFloat(const std::u32string &s)
+{
+    std::basic_istringstream<char32_t, std::char_traits<char32_t>,
+                             std::allocator<char32_t>>
+        iss(s);
+    float32_t f = 0;
+    iss >> std::noskipws >> f;
+    // noskipws considers leading whitespace invalid
+    // Check the entire string was consumed and if either failbit or badbit is
+    // set
+    return iss.eof() && (!iss.fail());
+}
+
+uint64_t Func::power(const uint64_t base, const uint64_t exponent)
+{
+    uint64_t res = 1;
+    if (0 != exponent)
+    {
+        res = base;
+        for (uint64_t i = 1; i < exponent; ++i)
+        {
+            res *= base;
+        }
+    }
+    return res;
+}
+
+bool Func::isPosInt(const std::string_view &s)
+{
+    bool res = false;
+    if (!s.empty())
+    {
+        res = true;
+        const std::locale loc;
+        const auto * const sEnd = s.end();
+        for (auto *it = s.begin(); it != sEnd; ++it)
+        {
+            res = res && std::isdigit(*it, loc);
+        }
+    }
+    return res;
+}
+
+bool Func::isPosInt(const std::u32string_view &s)
+{
+    bool res = false;
+    if (!s.empty())
+    {
+        res = true;
+        const std::locale loc;
+        const auto * const sEnd = s.end();
+        for (auto *it = s.begin(); it != sEnd; ++it)
+        {
+            const char32_t c = *it;
+            res = res && (c >= U'0' && c <= U'9');
+        }
+    }
+    return res;
+}
+
+uint64_t Func::str32ToLui(const std::u32string &s)
+{
+    uint64_t res = 0;
+    if (isPosInt(s))
+    {
+        const std::size_t sizeS = s.size();
+        for (std::size_t i = 0; i < sizeS; ++i)
+        {
+            res += (s[i] - U'0') * power(10, s.size() - 1 - i);
+        }
+    }
+    return res;
+}
+
+uint64_t Func::str32HexToLui(const std::u32string &s)
+{
+    uint64_t res = 0;
+    const std::size_t sizeS = s.size();
+    for (std::size_t i = 0; i < sizeS; ++i)
+    {
+        uint64_t val = 0;
+        if ((s[i] >= U'0') && (s[i] <= U'9'))
+        {
+            val = s[i] - U'0';
+        }
+        else if ((s[i] >= U'a') && (s[i] <= U'f'))
+        {
+            val = (10 + s[i]) - U'a';
+        }
+        else if ((s[i] >= U'A') && (s[i] <= U'F'))
+        {
+            val = (10 + s[i]) - U'A';
+        }
+        else
+        {
+            // Error, do nothing
+        }
+        res += val * power(16, s.size() - 1 - i);
+    }
+    return res;
+}
+
+float32_t Func::str32ToF(const std::u32string &s)
+{
+    float32_t res = 0.0f;
+    if (isFloat(s))
+    {
+        const std::size_t posInit = U'-' == s[0];
+        const std::size_t posPoint = s.find(U'.', 0);
+        const std::size_t sizeS = s.size();
+        for (std::size_t i = posInit; i < sizeS; ++i)
+        {
+            if (i != posPoint)
+            {
+                const std::size_t addOne = i > posPoint;
+                res += static_cast<float32_t>(s[i] - U'0') *
+                       std::pow(10.0f, static_cast<float32_t>(
+                                           (posPoint - 1 - i) + addOne));
+            }
+        }
+        if (0 != posInit)
+        {
+            res *= -1.0f;
+        }
+    }
+    return res;
+}
+
+std::u32string Func::luiTo32Str(uint64_t n)
+{
+    std::u32string res = U"";
+    do
+    {
+        res = std::u32string(1, (static_cast<char32_t>(n % 10) + U'0')) + res;
+    } while ((n /= 10) > 0);
+    return res;
+}
+
+std::u32string Func::luiTo32StrHex(uint64_t n)
+{
+    std::u32string res = U"";
+    do
+    {
+        if ((n % 16) <= 9)
+        {
+            res =
+                std::u32string(1, (static_cast<char32_t>(n % 16) + U'0')) + res;
+        }
+        else
+        {
+            res =
+                std::u32string(1, (static_cast<char32_t>(n % 16) + U'a')) + res;
+        }
+    } while ((n /= 16) > 0);
+    return res;
+}
+
+std::u32string Func::fTo32Str(float32_t n)
+{
+    std::u32string res = U"";
+    do
+    {
+        res = std::u32string(
+                  1, (static_cast<char32_t>(std::fmod(n, 10.0f)) + U'0')) +
+              res;
+    } while ((n /= 10.0f) > 1.0f);
+    return res;
 }
 
 std::string Func::getKeyWordLine(const std::string_view &line)
@@ -174,6 +356,32 @@ std::u32string Func::getKeyWordLine(const std::u32string_view &line)
     return res;
 }
 
+std::pair<std::string, std::string>
+Func::getKeyValueLine(const std::string_view &line)
+{
+    const std::size_t posEq = line.find("=", 0);
+    std::pair<std::string, std::string> res = {"", ""};
+    if (std::string::npos != posEq)
+    {
+        res.first = line.substr(0, posEq);
+        res.second = line.substr(posEq + 1, std::string::npos);
+    }
+    return res;
+}
+
+std::pair<std::u32string, std::u32string>
+Func::getKeyValueLine(const std::u32string_view &line)
+{
+    const std::size_t posEq = line.find(U"=", 0);
+    std::pair<std::u32string, std::u32string> res = {U"", U""};
+    if (std::u32string::npos != posEq)
+    {
+        res.first = line.substr(0, posEq);
+        res.second = line.substr(posEq + 1, std::u32string::npos);
+    }
+    return res;
+}
+
 bool Func::hasSuffixInList(const std::string_view &str,
                            const std::string *const begin,
                            const std::string *const end)
@@ -186,6 +394,186 @@ bool Func::hasSuffixInList(const std::string_view &str,
                       std::equal(ptr->rbegin(), ptr->rend(), str.rbegin()));
     }
     return res;
+}
+
+std::vector<std::string> Func::split(const std::string &s, const char delim)
+{
+    std::vector<std::string> res;
+    std::back_insert_iterator<std::vector<std::string>> result =
+        std::back_inserter(res);
+    std::stringstream ss(s, std::ios_base::in | std::ios_base::out);
+    std::string item;
+    while (std::getline(ss, item, delim))
+    {
+        *(result++) = item;
+    }
+    return res;
+}
+
+std::vector<std::string> Func::split(const std::string_view &s,
+                                     const std::string_view &delim)
+{
+    std::vector<std::string> res = {};
+    std::size_t posStart = 0;
+    std::size_t posEnd = 0;
+    const std::size_t delimLen = delim.length();
+    while ((posEnd = s.find(delim, posStart)) != std::string::npos)
+    {
+        static_cast<void>(
+            res.emplace_back(s.substr(posStart, posEnd - posStart)));
+        posStart = posEnd + delimLen;
+    }
+    static_cast<void>(res.emplace_back(s.substr(posStart, std::string::npos)));
+    return res;
+}
+
+std::vector<std::u32string> Func::split(const std::u32string &s,
+                                        const char32_t delim)
+{
+    std::vector<std::u32string> res;
+    std::back_insert_iterator<std::vector<std::u32string>> result =
+        std::back_inserter(res);
+    std::basic_stringstream<char32_t, std::char_traits<char32_t>> ss(
+        s, std::ios_base::in | std::ios_base::out);
+    std::u32string item;
+    while (std::getline(ss, item, delim))
+    {
+        *(result++) = item;
+    }
+    return res;
+}
+
+std::vector<std::u32string> Func::split(const std::u32string_view &s,
+                                        const std::u32string_view &delim)
+{
+    std::vector<std::u32string> res = {};
+    std::size_t posStart = 0;
+    std::size_t posEnd = 0;
+    const std::size_t delimLen = delim.length();
+    while ((posEnd = s.find(delim, posStart)) != std::u32string::npos)
+    {
+        static_cast<void>(
+            res.emplace_back(s.substr(posStart, posEnd - posStart)));
+        posStart = posEnd + delimLen;
+    }
+    static_cast<void>(
+        res.emplace_back(s.substr(posStart, std::u32string::npos)));
+    return res;
+}
+
+std::back_insert_iterator<std::u32string>
+Func::utf8ToUtf32(std::string::const_iterator be,
+                  const std::string::const_iterator en,
+                  std::back_insert_iterator<std::u32string> output)
+{
+    // Some useful precomputed data
+    static const std::array<uint8_t, 256> trailing = {
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+         1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+         3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5}};
+    static const std::array<char32_t, 6> offsets = {
+        {0x00'00'00'00, 0x00'00'30'80, 0x00'0E'20'80, 0x03'C8'20'80,
+         0xFA'08'20'80U, 0x82'08'20'80U}};
+    while (be < en)
+    {
+        char32_t codepoint = 0;
+        // decode the character
+        if (const uint8_t trailingBytes =
+                trailing[static_cast<uint64_t>(static_cast<uint8_t>(*be))];
+            (be + trailingBytes) < en)
+        {
+            if (trailingBytes <= 5)
+            {
+                for (uint8_t i = 0; i <= trailingBytes; ++i)
+                {
+                    if (i == trailingBytes)
+                    {
+                        codepoint += static_cast<uint8_t>(*be++);
+                    }
+                    else
+                    {
+                        (codepoint += static_cast<uint8_t>(*be++)) <<= 6;
+                    }
+                }
+            }
+            codepoint -= offsets[trailingBytes];
+        }
+        else
+        {
+            // Incomplete character
+            be = en;
+        }
+        *output++ = codepoint;
+    }
+    return output;
+}
+
+std::back_insert_iterator<std::string>
+Func::utf32ToUtf8(std::u32string::const_iterator be,
+                  const std::u32string::const_iterator en,
+                  std::back_insert_iterator<std::string> output)
+{
+    // Some useful precomputed data
+    static const std::array<uint8_t, 7> firstBytes = {
+        {0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC}};
+    while (be < en)
+    {
+        // Valid character
+        // Get the number of bytes to write
+        char32_t input = *be++;
+        std::size_t bytestoWrite = 1;
+        if (input < 0x80)
+        {
+            bytestoWrite = 1;
+        }
+        else if (input < 0x800)
+        {
+            bytestoWrite = 2;
+        }
+        else if (input < 0x1'00'00)
+        {
+            bytestoWrite = 3;
+        }
+        else if (input <= 0x00'10'FF'FF)
+        {
+            bytestoWrite = 4;
+        }
+        else
+        {
+            // Nothing to do
+        }
+
+        // Extract the bytes to write
+        std::array<uint8_t, 4> bytes;
+        if (bytestoWrite <= 4)
+        {
+            for (std::size_t i = 1; i <= bytestoWrite; ++i)
+            {
+                if (i == bytestoWrite)
+                {
+                    bytes[bytestoWrite - i] =
+                        static_cast<uint8_t>(input | firstBytes[bytestoWrite]);
+                }
+                else
+                {
+                    bytes[bytestoWrite - i] =
+                        static_cast<uint8_t>((input | 0x80) & 0xBF);
+                    input >>= 6;
+                }
+            }
+        }
+        // Add them to the output
+        output = std::copy(bytes.data(), bytes.data() + bytestoWrite, output);
+    }
+    return output;
 }
 
 } // namespace segment01
