@@ -20,10 +20,4 @@
 #ifndef MACRO_HPP
 #define MACRO_HPP
 
-#if defined(__GNUC__) || defined(__clang__)
-#define ATTR_PURE [[gnu::pure]]
-#else
-#define ATTR_PURE
-#endif
-
 #endif // MACRO_HPP

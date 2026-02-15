@@ -74,13 +74,14 @@ ChainText::ChainText(const std::string &str)
         {
             if (!parseString(u32str, true))
             {
-                Logger().info("Error parsing");
+                static_cast<void>(Logger().info("Error parsing"));
             }
         }
         else
         {
-            Logger().info("Error during the parsing of the string : " + str +
-                          " to make a ChainText.");
+            static_cast<void>(Logger().info(
+                "Error during the parsing of the string : " + str +
+                " to make a ChainText."));
             nodes = {};
             leafs = {};
             blocks = {};
@@ -163,6 +164,7 @@ std::u32string ChainText::toStr() const
 
 bool ChainText::parseString(const std::u32string &str, const bool setNodes)
 {
+    static constexpr int32_t nbSlashPrev = 2;
     int32_t countSlash = 0;
     uint64_t indexFina = 0;
     uint64_t sizeLeaf = 0;
@@ -172,7 +174,7 @@ bool ChainText::parseString(const std::u32string &str, const bool setNodes)
     const std::size_t strSize = str.size();
     for (std::size_t i = 0; i < strSize; ++i)
     {
-        if ((U'<' == str[i]) && (0 == (countSlash % 2)))
+        if ((U'<' == str[i]) && (0 == (countSlash % nbSlashPrev)))
         {
             if (!currLeaf.empty())
             {
@@ -227,7 +229,7 @@ bool ChainText::parseString(const std::u32string &str, const bool setNodes)
         else if (U'\\' == str[i])
         {
             ++countSlash;
-            if (0 == (countSlash % 2))
+            if (0 == (countSlash % nbSlashPrev))
             {
                 currLeaf += U'\\';
             }

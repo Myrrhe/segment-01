@@ -17,21 +17,25 @@
 //
 ////////////////////////////////////////////////////////////
 
+#include "Constant.hpp"
 #include "Func.hpp"
 #include "Logger.hpp"
 #include <catch2/catch_test_macros.hpp>
 
 TEST_CASE("Func", "[func]")
 {
+    static constexpr LONG biWidth = 200;
+    static constexpr LONG biHeight = 200;
+    static constexpr LONG biBitCount = 32;
     REQUIRE(segment01::Func::printVideoMode(sf::VideoMode({800, 600}, 32)) ==
             "(800 px, 600 px, 32 bpp)");
 
     BITMAPINFO bmi{};
     bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    bmi.bmiHeader.biWidth = 200;
-    bmi.bmiHeader.biHeight = 200;
+    bmi.bmiHeader.biWidth = biWidth;
+    bmi.bmiHeader.biHeight = biHeight;
     bmi.bmiHeader.biPlanes = 1;
-    bmi.bmiHeader.biBitCount = 32;
+    bmi.bmiHeader.biBitCount = biBitCount;
     bmi.bmiHeader.biCompression = BI_RGB;
     void *bits = nullptr;
     const HDC hdc = ::GetDC(nullptr);
@@ -40,10 +44,11 @@ TEST_CASE("Func", "[func]")
     static_cast<void>(::ReleaseDC(nullptr, hdc));
     // BGRA
     auto *const pixels = static_cast<uint8_t *const>(bits);
-    pixels[0] = 0x00; // B
-    pixels[1] = 0x00; // G
-    pixels[2] = 0xFF; // R
-    pixels[3] = 0xFF; // A
+    std::size_t colorIndex = 0;
+    pixels[colorIndex++] = 0; // B
+    pixels[colorIndex++] = 0; // G
+    pixels[colorIndex++] = segment01::Constant::MaxColor; // R
+    pixels[colorIndex] = segment01::Constant::MaxColor; // A
     const sf::Image image = segment01::Func::hBITMAPToImage(hBitmap);
     REQUIRE(image.getSize() == sf::Vector2<uint32_t>(200, 200));
 

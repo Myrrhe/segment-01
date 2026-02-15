@@ -19,7 +19,7 @@
 
 #ifndef FUNC_HPP
 #define FUNC_HPP
-#include "Macro.hpp"
+#include "OsManager.hpp"
 #include "StaticObject.hpp"
 #include "Types.hpp"
 #include <SFML/Graphics.hpp>
@@ -43,7 +43,7 @@ public:
     colorBalance(const sf::Color &lhs, const sf::Color &rhs,
                  const float64_t coeff);
 
-    [[nodiscard]] [[gnu::pure]] static float64_t
+    [[nodiscard]] ATTR_PURE static float64_t
     colorDistanceSquared(const sf::Color &lhs, const sf::Color &rhs);
 
     static std::vector<std::string> getDir(const std::string &dir);
@@ -83,7 +83,7 @@ public:
     static std::pair<std::u32string, std::u32string>
     getKeyValueLine(const std::u32string_view &line);
 
-    [[nodiscard]] [[gnu::pure]] static bool
+    [[nodiscard]] ATTR_PURE static bool
     hasSuffixInList(const std::string_view &str, const std::string *const begin,
                     const std::string *const end);
 

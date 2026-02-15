@@ -109,6 +109,8 @@ public:
     static constexpr std::size_t NbInfo =
         static_cast<std::size_t>(Info::NB_INFO);
 
+    static constexpr uint64_t DefaultSize = 30;
+
 private:
     const sf::Font *font;
     uint64_t charSize;

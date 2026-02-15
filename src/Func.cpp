@@ -39,6 +39,9 @@ std::string Func::printVideoMode(const sf::VideoMode &videoMode)
 
 sf::Image Func::hBITMAPToImage(const HBITMAP hBitmap)
 {
+    static constexpr WORD biBitCount = 32;
+    static constexpr std::size_t stepPixel = 4;
+    static constexpr std::size_t offsetPixel = 2;
     BITMAP bmp;
     sf::Image res;
     if (0 != ::GetObject(hBitmap, sizeof(BITMAP), &bmp))
@@ -55,7 +58,7 @@ sf::Image Func::hBITMAPToImage(const HBITMAP hBitmap)
         bmi.bmiHeader.biHeight = -height;
         bmi.bmiHeader.biPlanes = 1;
         // Force RGBA (BGRA en réalité)
-        bmi.bmiHeader.biBitCount = 32;
+        bmi.bmiHeader.biBitCount = biBitCount;
         bmi.bmiHeader.biCompression = BI_RGB;
 
         // Allouer un buffer
@@ -74,10 +77,10 @@ sf::Image Func::hBITMAPToImage(const HBITMAP hBitmap)
             {
                 // SFML attend du RGBA, mais Windows fournit du
                 // BGRA → convertir
-                for (size_t i = 0; i < nbPixels; i += 4)
+                for (std::size_t i = 0; i < nbPixels; i += stepPixel)
                 {
                     // B <-> R
-                    std::swap(pixels[i], pixels[i + 2]);
+                    std::swap(pixels[i], pixels[i + offsetPixel]);
                     // G reste inchangé
                     // A reste inchangé (souvent 0xFF si non transparent)
                 }
@@ -199,7 +202,7 @@ bool Func::isPosInt(const std::string_view &s)
     {
         res = true;
         const std::locale loc;
-        const auto * const sEnd = s.end();
+        const auto *const sEnd = s.end();
         for (auto *it = s.begin(); it != sEnd; ++it)
         {
             res = res && std::isdigit(*it, loc);
@@ -215,7 +218,7 @@ bool Func::isPosInt(const std::u32string_view &s)
     {
         res = true;
         const std::locale loc;
-        const auto * const sEnd = s.end();
+        const auto *const sEnd = s.end();
         for (auto *it = s.begin(); it != sEnd; ++it)
         {
             const char32_t c = *it;
@@ -227,13 +230,14 @@ bool Func::isPosInt(const std::u32string_view &s)
 
 uint64_t Func::str32ToLui(const std::u32string &s)
 {
+    static constexpr uint64_t baseTen = 10;
     uint64_t res = 0;
     if (isPosInt(s))
     {
         const std::size_t sizeS = s.size();
         for (std::size_t i = 0; i < sizeS; ++i)
         {
-            res += (s[i] - U'0') * power(10, s.size() - 1 - i);
+            res += (s[i] - U'0') * power(baseTen, s.size() - 1 - i);
         }
     }
     return res;
@@ -241,6 +245,8 @@ uint64_t Func::str32ToLui(const std::u32string &s)
 
 uint64_t Func::str32HexToLui(const std::u32string &s)
 {
+    static constexpr uint64_t baseTen = 10;
+    static constexpr uint64_t baseSixteen = 16;
     uint64_t res = 0;
     const std::size_t sizeS = s.size();
     for (std::size_t i = 0; i < sizeS; ++i)
@@ -252,17 +258,17 @@ uint64_t Func::str32HexToLui(const std::u32string &s)
         }
         else if ((s[i] >= U'a') && (s[i] <= U'f'))
         {
-            val = (10 + s[i]) - U'a';
+            val = (baseTen + s[i]) - U'a';
         }
         else if ((s[i] >= U'A') && (s[i] <= U'F'))
         {
-            val = (10 + s[i]) - U'A';
+            val = (baseTen + s[i]) - U'A';
         }
         else
         {
             // Error, do nothing
         }
-        res += val * power(16, s.size() - 1 - i);
+        res += val * power(baseSixteen, s.size() - 1 - i);
     }
     return res;
 }
@@ -295,30 +301,36 @@ float32_t Func::str32ToF(const std::u32string &s)
 
 std::u32string Func::luiTo32Str(uint64_t n)
 {
+    static constexpr uint64_t baseTen = 10;
     std::u32string res = U"";
     do
     {
-        res = std::u32string(1, (static_cast<char32_t>(n % 10) + U'0')) + res;
-    } while ((n /= 10) > 0);
+        res = std::u32string(1, (static_cast<char32_t>(n % baseTen) + U'0')) +
+              res;
+    } while ((n /= baseTen) > 0);
     return res;
 }
 
 std::u32string Func::luiTo32StrHex(uint64_t n)
 {
+    static constexpr uint64_t singleDigitSize = 9;
+    static constexpr uint64_t baseSixteen = 16;
     std::u32string res = U"";
     do
     {
-        if ((n % 16) <= 9)
+        if ((n % baseSixteen) <= singleDigitSize)
         {
-            res =
-                std::u32string(1, (static_cast<char32_t>(n % 16) + U'0')) + res;
+            res = std::u32string(
+                      1, (static_cast<char32_t>(n % baseSixteen) + U'0')) +
+                  res;
         }
         else
         {
-            res =
-                std::u32string(1, (static_cast<char32_t>(n % 16) + U'a')) + res;
+            res = std::u32string(
+                      1, (static_cast<char32_t>(n % baseSixteen) + U'a')) +
+                  res;
         }
-    } while ((n /= 16) > 0);
+    } while ((n /= baseSixteen) > 0);
     return res;
 }
 
@@ -467,7 +479,9 @@ Func::utf8ToUtf32(std::string::const_iterator be,
                   std::back_insert_iterator<std::u32string> output)
 {
     // Some useful precomputed data
-    static const std::array<uint8_t, 256> trailing = {
+    static constexpr uint8_t maxTrailingBytes = 5;
+    static constexpr uint8_t sizeShift = 6;
+    static constexpr std::array<uint8_t, 256> trailing = {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -479,7 +493,7 @@ Func::utf8ToUtf32(std::string::const_iterator be,
          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
          1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
          3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5}};
-    static const std::array<char32_t, 6> offsets = {
+    static constexpr std::array<char32_t, 6> offsets = {
         {0x00'00'00'00, 0x00'00'30'80, 0x00'0E'20'80, 0x03'C8'20'80,
          0xFA'08'20'80U, 0x82'08'20'80U}};
     while (be < en)
@@ -490,7 +504,7 @@ Func::utf8ToUtf32(std::string::const_iterator be,
                 trailing[static_cast<uint64_t>(static_cast<uint8_t>(*be))];
             (be + trailingBytes) < en)
         {
-            if (trailingBytes <= 5)
+            if (trailingBytes <= maxTrailingBytes)
             {
                 for (uint8_t i = 0; i <= trailingBytes; ++i)
                 {
@@ -500,7 +514,8 @@ Func::utf8ToUtf32(std::string::const_iterator be,
                     }
                     else
                     {
-                        (codepoint += static_cast<uint8_t>(*be++)) <<= 6;
+                        (codepoint += static_cast<uint8_t>(*be++)) <<=
+                            sizeShift;
                     }
                 }
             }
@@ -522,38 +537,36 @@ Func::utf32ToUtf8(std::u32string::const_iterator be,
                   std::back_insert_iterator<std::string> output)
 {
     // Some useful precomputed data
-    static const std::array<uint8_t, 7> firstBytes = {
+
+    static constexpr std::array<uint8_t, 7> firstBytes = {
         {0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC}};
+    static constexpr std::array<std::pair<char32_t, std::size_t>, 5>
+        inputThresholds = {{{0x80, 1},
+                            {0x800, 2},
+                            {0x1'00'00, 3},
+                            {0x00'11'00'00, 4},
+                            {std::numeric_limits<char32_t>::max(), 1}}};
+    static constexpr std::size_t maxBytes = 4;
+    static constexpr char32_t bitEigthPlace = 0x80;
+    static constexpr char32_t bitEigthPlaceZeroThenOne = 0xBF;
+    static constexpr char32_t bitShift = 6;
     while (be < en)
     {
         // Valid character
         // Get the number of bytes to write
         char32_t input = *be++;
         std::size_t bytestoWrite = 1;
-        if (input < 0x80)
+
+        auto *it = inputThresholds.begin();
+        while (it != inputThresholds.end() && input < it->first)
         {
-            bytestoWrite = 1;
-        }
-        else if (input < 0x800)
-        {
-            bytestoWrite = 2;
-        }
-        else if (input < 0x1'00'00)
-        {
-            bytestoWrite = 3;
-        }
-        else if (input <= 0x00'10'FF'FF)
-        {
-            bytestoWrite = 4;
-        }
-        else
-        {
-            // Nothing to do
+            bytestoWrite = it->second;
+            ++it;
         }
 
         // Extract the bytes to write
         std::array<uint8_t, 4> bytes;
-        if (bytestoWrite <= 4)
+        if (bytestoWrite <= maxBytes)
         {
             for (std::size_t i = 1; i <= bytestoWrite; ++i)
             {
@@ -564,9 +577,9 @@ Func::utf32ToUtf8(std::u32string::const_iterator be,
                 }
                 else
                 {
-                    bytes[bytestoWrite - i] =
-                        static_cast<uint8_t>((input | 0x80) & 0xBF);
-                    input >>= 6;
+                    bytes[bytestoWrite - i] = static_cast<uint8_t>(
+                        (input | bitEigthPlace) & bitEigthPlaceZeroThenOne);
+                    input >>= bitShift;
                 }
             }
         }

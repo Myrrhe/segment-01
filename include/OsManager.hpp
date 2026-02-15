@@ -30,15 +30,13 @@
 #include <memory>
 #include <string>
 
-#ifdef __linux__
-#define GNU_CONST [[gnu::const]]
-#define GNU_PURE [[gnu::pure]]
-#elif _WIN32
-#define GNU_CONST
-#define GNU_PURE
-#elif _OSX
-
-#endif // __linux__
+#if defined(__GNUC__) || defined(__clang__)
+#define ATTR_PURE [[gnu::pure]]
+#define ATTR_CONST [[gnu::const]]
+#else
+#define ATTR_PURE
+#define ATTR_CONST
+#endif
 
 namespace segment01
 {

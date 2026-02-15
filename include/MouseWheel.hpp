@@ -19,6 +19,7 @@
 
 #ifndef MOUSEWHEEL_HPP
 #define MOUSEWHEEL_HPP
+#include "OsManager.hpp"
 #include "StaticObject.hpp"
 #include "Types.hpp"
 #include <cstdint>
@@ -31,7 +32,7 @@ class MouseWheel final : public StaticObject
 public:
     static void initialize();
 
-    [[nodiscard]] [[gnu::pure]] static float32_t getDeltaWheel();
+    [[nodiscard]] ATTR_PURE static float32_t getDeltaWheel();
     static void setDeltaWheel(const float32_t newDeltaWheel);
 
 private:

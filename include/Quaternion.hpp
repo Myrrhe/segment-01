@@ -19,6 +19,7 @@
 
 #ifndef QUATERNION_HPP
 #define QUATERNION_HPP
+#include "OsManager.hpp"
 #include "Types.hpp"
 #include <complex>
 #include <cstdint>
@@ -40,7 +41,7 @@ public:
     Quaternion &operator=(const Quaternion &right);
     Quaternion &operator=(Quaternion &&right) noexcept;
     ~Quaternion();
-    [[gnu::const]] const float64_t &operator[](const std::size_t i) const;
+    ATTR_CONST const float64_t &operator[](const std::size_t i) const;
     float64_t &operator[](const std::size_t i);
     Quaternion &operator++();
     Quaternion operator++(const int32_t);
@@ -50,21 +51,21 @@ public:
     Quaternion &operator-=(const Quaternion &right);
     Quaternion &operator*=(const Quaternion &right);
     Quaternion &operator/=(const Quaternion &right);
-    [[gnu::pure]] Quaternion operator+() const;
-    [[gnu::pure]] Quaternion operator-() const;
-    [[nodiscard]] [[gnu::pure]] float64_t getNormSquare() const;
-    [[nodiscard]] [[gnu::pure]] float64_t getNorm() const;
-    [[nodiscard]] [[gnu::pure]] Quaternion getConjugation() const;
-    [[nodiscard]] [[gnu::pure]] Quaternion getReciprocal() const;
+    ATTR_PURE Quaternion operator+() const;
+    ATTR_PURE Quaternion operator-() const;
+    [[nodiscard]] ATTR_PURE float64_t getNormSquare() const;
+    [[nodiscard]] ATTR_PURE float64_t getNorm() const;
+    [[nodiscard]] ATTR_PURE Quaternion getConjugation() const;
+    [[nodiscard]] ATTR_PURE Quaternion getReciprocal() const;
     Quaternion &setNorm(const float64_t newNorm);
     Quaternion &conjugate();
     Quaternion &reciproc();
-    [[nodiscard]] [[gnu::pure]] float64_t getX() const;
-    [[nodiscard]] [[gnu::pure]] float64_t getY() const;
-    [[nodiscard]] [[gnu::pure]] float64_t getZ() const;
-    [[nodiscard]] [[gnu::pure]] float64_t getT() const;
-    [[nodiscard]] [[gnu::pure]] std::complex<float64_t> getXY() const;
-    [[nodiscard]] [[gnu::pure]] std::complex<float64_t> getZT() const;
+    [[nodiscard]] ATTR_PURE float64_t getX() const;
+    [[nodiscard]] ATTR_PURE float64_t getY() const;
+    [[nodiscard]] ATTR_PURE float64_t getZ() const;
+    [[nodiscard]] ATTR_PURE float64_t getT() const;
+    [[nodiscard]] ATTR_PURE std::complex<float64_t> getXY() const;
+    [[nodiscard]] ATTR_PURE std::complex<float64_t> getZT() const;
     void setX(const float64_t newX);
     void setY(const float64_t newY);
     void setZ(const float64_t newZ);

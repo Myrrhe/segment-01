@@ -340,6 +340,7 @@ float32_t TextComp::getWidthWrap() const { return m_widthWrap; }
 
 sf::Vector2<float32_t> TextComp::findCharacterPos(std::size_t index) const
 {
+    static constexpr std::size_t tabSize = 4;
     auto position = sf::Vector2<float32_t>();
 
     // Make sure that we have a valid font
@@ -486,7 +487,7 @@ sf::Vector2<float32_t> TextComp::findCharacterPos(std::size_t index) const
                 position.x += curWhitespaceWidth;
                 continue;
             case U'\t':
-                position.x += curWhitespaceWidth * 4;
+                position.x += curWhitespaceWidth * tabSize;
                 continue;
             case U'\n':
                 position.y += curLineSpacing;
@@ -576,6 +577,7 @@ void TextComp::draw(sf::RenderTarget &target, sf::RenderStates states) const
 
 void TextComp::ensureGeometryUpdate() const
 {
+    static constexpr std::size_t tabSize = 4;
     if (nullptr == m_infoText.getInfo<InfoText::Info::FONT>())
     {
         return;
@@ -1090,7 +1092,7 @@ void TextComp::ensureGeometryUpdate() const
                                 .getInfo<InfoText::Info::THICKNESS>());
                     }
                 }
-                x += curWhitespaceWidth * 4;
+                x += curWhitespaceWidth * tabSize;
                 prevX = x;
                 break;
             }

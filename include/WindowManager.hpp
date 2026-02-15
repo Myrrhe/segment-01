@@ -20,6 +20,7 @@
 #ifndef WINDOWMANAGER_HPP
 #define WINDOWMANAGER_HPP
 
+#include "OsManager.hpp"
 #include "StaticObject.hpp"
 #include "Types.hpp"
 #include <SFML/Graphics.hpp>
@@ -79,18 +80,18 @@ public:
     static sf::Vector2<float32_t>
     mapPixelToCoords(const sf::Vector2<int32_t> &point);
 
-    [[nodiscard]] [[gnu::pure]] static sf::RenderWindow *getRenderWindow();
+    [[nodiscard]] ATTR_PURE static sf::RenderWindow *getRenderWindow();
 
-    [[nodiscard]] [[gnu::pure]] static bool isTextEntered();
-    [[nodiscard]] [[gnu::pure]] static char32_t getCharEntered();
+    [[nodiscard]] ATTR_PURE static bool isTextEntered();
+    [[nodiscard]] ATTR_PURE static char32_t getCharEntered();
 
-    [[nodiscard]] [[gnu::pure]] static bool isKeyPressed();
-    [[nodiscard]] [[gnu::pure]] static sf::Keyboard::Key getKeyPressed();
+    [[nodiscard]] ATTR_PURE static bool isKeyPressed();
+    [[nodiscard]] ATTR_PURE static sf::Keyboard::Key getKeyPressed();
 
-    [[nodiscard]] [[gnu::pure]] static bool isAltEntered();
-    [[nodiscard]] [[gnu::pure]] static bool isControlEntered();
-    [[nodiscard]] [[gnu::pure]] static bool isShiftEntered();
-    [[nodiscard]] [[gnu::pure]] static bool isSystemEntered();
+    [[nodiscard]] ATTR_PURE static bool isAltEntered();
+    [[nodiscard]] ATTR_PURE static bool isControlEntered();
+    [[nodiscard]] ATTR_PURE static bool isShiftEntered();
+    [[nodiscard]] ATTR_PURE static bool isSystemEntered();
 
     static constexpr uint64_t Width = 600;
     static constexpr uint64_t Height = 600;

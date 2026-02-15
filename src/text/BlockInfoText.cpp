@@ -49,37 +49,12 @@ BlockInfoText::BlockInfoText(const std::u32string &str)
     for (std::size_t i = 0; i < vecStrSize; ++i)
     {
         const auto [key, _val] = Func::getKeyValueLine(vecStr[i]);
-        if (key == InfoText::Keys32[1])
+        for (std::size_t j = 1; j <= InfoText::NbInfo; ++j)
         {
-            useInfo[1] = true;
-        }
-        else if (key == InfoText::Keys32[2])
-        {
-            useInfo[2] = true;
-        }
-        else if (key == InfoText::Keys32[3])
-        {
-            useInfo[3] = true;
-        }
-        else if (key == InfoText::Keys32[4])
-        {
-            useInfo[4] = true;
-        }
-        else if (key == InfoText::Keys32[5])
-        {
-            useInfo[5] = true;
-        }
-        else if (key == InfoText::Keys32[6])
-        {
-            useInfo[6] = true;
-        }
-        else if (key == InfoText::Keys32[7])
-        {
-            useInfo[7] = true;
-        }
-        else
-        {
-            // Nothing to do
+            if (key == InfoText::Keys32[j])
+            {
+                useInfo[j] = true;
+            }
         }
     }
 }
@@ -128,89 +103,12 @@ bool BlockInfoText::isUsed(const uint64_t i) const { return useInfo[i]; }
 
 bool BlockInfoText::isUsed(const InfoText::Info info) const
 {
-    bool res = false;
-    switch (info)
-    {
-    case InfoText::Info::FONT: {
-        res = useInfo[0];
-        break;
-    }
-    case InfoText::Info::CHAR_SIZE: {
-        res = useInfo[1];
-        break;
-    }
-    case InfoText::Info::LETTER_SPACING: {
-        res = useInfo[2];
-        break;
-    }
-    case InfoText::Info::LINE_SPACING_FACTOR: {
-        res = useInfo[3];
-        break;
-    }
-    case InfoText::Info::STYLE: {
-        res = useInfo[4];
-        break;
-    }
-    case InfoText::Info::FILL_COLOR: {
-        res = useInfo[5];
-        break;
-    }
-    case InfoText::Info::OUTLINE_COLOR: {
-        res = useInfo[6];
-        break;
-    }
-    case InfoText::Info::THICKNESS: {
-        res = useInfo[7];
-        break;
-    }
-    default: {
-        res = false;
-        break;
-    }
-    }
-    return res;
+    return useInfo[static_cast<std::size_t>(info)];
 }
 
 void BlockInfoText::setUsed(const InfoText::Info info, const bool newUsed)
 {
-    switch (info)
-    {
-    case InfoText::Info::FONT: {
-        useInfo[0] = newUsed;
-        break;
-    }
-    case InfoText::Info::CHAR_SIZE: {
-        useInfo[1] = newUsed;
-        break;
-    }
-    case InfoText::Info::LETTER_SPACING: {
-        useInfo[2] = newUsed;
-        break;
-    }
-    case InfoText::Info::LINE_SPACING_FACTOR: {
-        useInfo[3] = newUsed;
-        break;
-    }
-    case InfoText::Info::STYLE: {
-        useInfo[4] = newUsed;
-        break;
-    }
-    case InfoText::Info::FILL_COLOR: {
-        useInfo[5] = newUsed;
-        break;
-    }
-    case InfoText::Info::OUTLINE_COLOR: {
-        useInfo[6] = newUsed;
-        break;
-    }
-    case InfoText::Info::THICKNESS: {
-        useInfo[7] = newUsed;
-        break;
-    }
-    default: {
-        break;
-    }
-    }
+    useInfo[static_cast<std::size_t>(info)] = newUsed;
 }
 
 const InfoText &BlockInfoText::getInfoText() const { return infoText; }

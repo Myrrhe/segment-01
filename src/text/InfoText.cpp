@@ -33,8 +33,9 @@ const char32_t InfoText::Separator = U',';
 const InfoText InfoText::Default = InfoText();
 
 InfoText::InfoText()
-    : font(nullptr), charSize(30), letterSpacing({true, 1.0f}),
-      lineSpacingFactor(1.0f), style(Style::REGULAR),
+    : font(nullptr), charSize(DefaultSize),
+      letterSpacing({true, 1.0f}), lineSpacingFactor(1.0f),
+      style(Style::REGULAR),
       fillColor(sf::Color(Constant::MaxColor, Constant::MaxColor,
                           Constant::MaxColor, Constant::MaxColor)),
       outlineColor(sf::Color(0, 0, 0, Constant::MaxColor)), thickness(0)
@@ -56,7 +57,7 @@ InfoText::InfoText(const sf::Font *const newFont, const uint64_t newCharSize)
 }
 
 InfoText::InfoText(const std::u32string &str)
-    : font(nullptr), charSize(30), letterSpacing({true, 1.0f}),
+    : font(nullptr), charSize(DefaultSize), letterSpacing({true, 1.0f}),
       lineSpacingFactor(1.0f), style(Style::REGULAR),
       fillColor(sf::Color(Constant::MaxColor, Constant::MaxColor,
                           Constant::MaxColor, Constant::MaxColor)),
@@ -64,6 +65,7 @@ InfoText::InfoText(const std::u32string &str)
                              Constant::MaxColor, Constant::MaxColor)),
       thickness(0)
 {
+    static constexpr std::size_t posLeSpace = 2;
     std::vector<std::u32string> vecStr = Func::split(str, Separator);
     const std::size_t vecStrSize = vecStr.size();
     for (std::size_t i = 0; i < vecStrSize; ++i)
@@ -77,7 +79,7 @@ InfoText::InfoText(const std::u32string &str)
         {
             std::get<0>(letterSpacing) = val[0] - U'0';
             std::get<1>(letterSpacing) =
-                Func::str32ToF(val.substr(2, std::string::npos));
+                Func::str32ToF(val.substr(posLeSpace, std::string::npos));
         }
         else if (key == U"leSpaceFix")
         {
@@ -180,7 +182,6 @@ float32_t InfoText::getThickness() const { return thickness; }
 // {
 //     return font;
 // }
-
 
 template <>
 InfoText::Typer<InfoText::Info::FONT>::Type
@@ -330,47 +331,7 @@ std::u32string InfoText::getValStr(const Info i) const
 
 const std::u32string &InfoText::getKeyStr32(const Info i)
 {
-    const std::u32string *res = &Constant::EmptyStr32;
-    switch (i)
-    {
-    case Info::FONT: {
-        res = &Keys32[0];
-        break;
-    }
-    case Info::CHAR_SIZE: {
-        res = &Keys32[1];
-        break;
-    }
-    case Info::LETTER_SPACING: {
-        res = &Keys32[2];
-        break;
-    }
-    case Info::LINE_SPACING_FACTOR: {
-        res = &Keys32[3];
-        break;
-    }
-    case Info::STYLE: {
-        res = &Keys32[4];
-        break;
-    }
-    case Info::FILL_COLOR: {
-        res = &Keys32[5];
-        break;
-    }
-    case Info::OUTLINE_COLOR: {
-        res = &Keys32[6];
-        break;
-    }
-    case Info::THICKNESS: {
-        res = &Keys32[7];
-        break;
-    }
-    default: {
-        res = &Constant::EmptyStr32;
-        break;
-    }
-    }
-    return *res;
+    return Keys32[static_cast<std::size_t>(i)];
 }
 
 InfoText::Info operator++(InfoText::Info &i, const int32_t)
