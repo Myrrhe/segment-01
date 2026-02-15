@@ -1,0 +1,152 @@
+name: SonarQube
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    name: Build and analyze
+    runs-on: windows-latest
+    env:
+      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
+      SFML_INSTALL_DIR: C:/Program Files (x86)/SFML
+    steps:
+      # 1
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      # 2
+      - name: Cache SFML
+        id: cache-sfml
+        uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c  # v3
+        # uses: actions/cache@b08ff587957b579b5a55d21fd28f63d7e10b9410  # v3
+        with:
+          path: C:/Program Files (x86)/SFML
+          key: SFML-3.0.2-${{ runner.os }}-v1
+          restore-keys: |
+            SFML-3.0.2-${{ runner.os }}-
+      # 3
+      - name: Install MinGW
+        uses: msys2/setup-msys2@4f806de0a5a7294ffabaff804b38a9b435a73bda  # v2
+        # uses: msys2/setup-msys2@d6aa6b43aba0a6cb7ef79d11b4653af679d58d9d  # v2
+        with:
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-make
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-lcov
+      # 3bis
+      - name: Install gcovr
+        run: |
+          pip install gcovr
+      # 4
+      - name: Install SFML
+        if: steps.cache-sfml.outputs.cache-hit != 'true'
+        env:
+          SFML_TOKEN: ${{ secrets.SFML_TOKEN }}
+        run: |
+          mkdir "C:/Program Files (x86)/SFML"
+          curl -L -H "Authorization: token $SFML_TOKEN" -o sfml.zip https://github.com/Myrrhe/sfml-myrrhe/raw/main/sfml.zip
+          powershell -Command "
+            if (-not (Test-Path 'sfml.zip')) { throw 'sfml.zip not downloaded' }
+            try {
+              Expand-Archive -LiteralPath sfml.zip -DestinationPath 'C:/Program Files (x86)/SFML' -Force
+            } catch {
+              Write-Error 'SFML archive is invalid or corrupted.'
+              exit 1
+            }
+          "
+      # 5
+      - name: Configure (MinGW / CMake)
+        if: runner.os == 'Windows'
+        shell: bash
+        env:
+          SFML_INSTALL_DIR: 'C:/Program Files (x86)/SFML'
+          BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
+        run: |
+          export PATH="/mingw64/bin:$PATH"
+          if ! which cmake; then
+            echo "cmake not found"
+            exit 1
+          fi
+          cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug -DSFML_DIR="$SFML_INSTALL_DIR" -DBUILD_WRAPPER_OUT_DIR="$BUILD_WRAPPER_OUT_DIR"
+      # 6
+      - name: Install Build Wrapper
+        id: install_wrapper
+        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
+        # uses: SonarSource/sonarqube-scan-action/install-build-wrapper@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
+      # 7
+      - name: Run Build Wrapper (Windows PowerShell)
+        shell: pwsh
+        env:
+          BUILD_WRAPPER_OUT_DIR: ${{ env.BUILD_WRAPPER_OUT_DIR }}
+        run: |
+          # Find the build-wrapper exe installed by the action
+          $bwExe = (Get-Command build-wrapper-win-x86-64.exe -ErrorAction SilentlyContinue).Source
+          if (-not $bwExe) {
+            Write-Error "build-wrapper-win-x86-64.exe not found in PATH. Did the install-build-wrapper step succeed?"
+            exit 1
+          }
+          Write-Host "Using build-wrapper at: $bwExe"
+          & $bwExe --out-dir $env:BUILD_WRAPPER_OUT_DIR cmake --build build --config Debug
+      # 8
+      - name: Run unit tests (CTest)
+        shell: bash
+        run: |
+          cd build
+          ctest --output-on-failure --build-config Debug
+      - name: Generate coverage report
+        run: |
+          gcovr -r . --sonarqube coverage.xml
+      # - name: Generate gcov files
+      #   shell: bash
+      #   run: |
+      #     gcovr \
+      #     -r . \
+      #     --sonarqube coverage.xml \
+      #     --exclude-directories build \
+      #     --gcov-ignore-errors=no_working_dir_found
+
+      #     # cd build/CMakeFiles/segment01.dir/src
+      #     # for f in ../../../../src/*.cpp; do
+      #     #   echo "a $(basename "$f")"
+      #     #   fname=$(basename "$f")
+      #     #   gcda="$fname.gcda"
+      #     #   if [ -f "$gcda" ]; then  # vérifie que le fichier .gcda existe
+      #     #     echo "Generating gcov for $fname"
+      #     #     gcov -o . "$fname.cpp"
+      #     #   else
+      #     #     echo "Skipping $fname: $gcda does not exist"
+      #     #   fi
+      #     # done
+
+      #     # for hdr in ../../../../include/*.hpp; do
+      #     #   fname=$(basename "$hdr")           # ex: FontManager.hpp
+      #     #   # Pour les headers, gcov recherche le .gcda correspondant dans le même répertoire que le .cpp
+      #     #   # On prend le même principe
+      #     #   gcda="${fname%.hpp}.cpp.gcda"      # si le header est inclus dans un cpp du même nom
+      #     #   if [ -f "$gcda" ]; then
+      #     #     echo "Generating gcov for header $fname"
+      #     #     gcov -o . "$hdr.hpp"
+      #     #   else
+      #     #     echo "Skipping header $fname: $gcda does not exist"
+      #     #   fi
+      #     # done
+      # 10
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
+        # uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602  # v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            --define "sonar.tests=tests"
+            --define "sonar.test.inclusions=tests/**/*.cpp"
+            --define "sonar.cfamily.compile-commands=${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
+            --define "sonar.coverageReportPaths=coverage.xml
+
+# --define "sonar.cfamily.gcov.reportsPath=build/CMakeFiles/segment01.dir/src"

@@ -1,0 +1,368 @@
+////////////////////////////////////////////////////////////
+// A basic function library.
+// Copyright (C) 2026  Myrrhe <email>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+////////////////////////////////////////////////////////////
+
+#include "Input.hpp"
+#include <catch2/catch_test_macros.hpp>
+
+TEST_CASE("Input", "[input]")
+{
+    segment01::Input::initialize();
+
+    REQUIRE(segment01::Input().getTypeInput() ==
+            segment01::Input::TypeInput::ERROR_TYPE_INPUT);
+    REQUIRE(segment01::Input(sf::Keyboard::Key::A).getKey() ==
+            sf::Keyboard::Key::A);
+    REQUIRE(segment01::Input(sf::Mouse::Button::Left).getButton() ==
+            sf::Mouse::Button::Left);
+    REQUIRE(segment01::Input(sf::Joystick::Axis::X, 0, false).getAxis() ==
+            sf::Joystick::Axis::X);
+    REQUIRE(segment01::Input(0, 0).getTypeInput() ==
+            segment01::Input::TypeInput::JOYSTICK);
+    auto i1 = segment01::Input(sf::Keyboard::Key::A);
+    segment01::Input i2(i1);
+    segment01::Input i3 = i2;
+    segment01::Input i4 = std::move(i3);
+    i1 = i4;
+    i2 = std::move(i4);
+
+    REQUIRE(segment01::Input("A").getKey() == sf::Keyboard::Key::A);
+    REQUIRE(segment01::Input("B").getKey() == sf::Keyboard::Key::B);
+    REQUIRE(segment01::Input("C").getKey() == sf::Keyboard::Key::C);
+    REQUIRE(segment01::Input("D").getKey() == sf::Keyboard::Key::D);
+    REQUIRE(segment01::Input("E").getKey() == sf::Keyboard::Key::E);
+    REQUIRE(segment01::Input("F").getKey() == sf::Keyboard::Key::F);
+    REQUIRE(segment01::Input("G").getKey() == sf::Keyboard::Key::G);
+    REQUIRE(segment01::Input("H").getKey() == sf::Keyboard::Key::H);
+    REQUIRE(segment01::Input("I").getKey() == sf::Keyboard::Key::I);
+    REQUIRE(segment01::Input("J").getKey() == sf::Keyboard::Key::J);
+    REQUIRE(segment01::Input("K").getKey() == sf::Keyboard::Key::K);
+    REQUIRE(segment01::Input("L").getKey() == sf::Keyboard::Key::L);
+    REQUIRE(segment01::Input("M").getKey() == sf::Keyboard::Key::M);
+    REQUIRE(segment01::Input("N").getKey() == sf::Keyboard::Key::N);
+    REQUIRE(segment01::Input("O").getKey() == sf::Keyboard::Key::O);
+    REQUIRE(segment01::Input("P").getKey() == sf::Keyboard::Key::P);
+    REQUIRE(segment01::Input("Q").getKey() == sf::Keyboard::Key::Q);
+    REQUIRE(segment01::Input("R").getKey() == sf::Keyboard::Key::R);
+    REQUIRE(segment01::Input("S").getKey() == sf::Keyboard::Key::S);
+    REQUIRE(segment01::Input("T").getKey() == sf::Keyboard::Key::T);
+    REQUIRE(segment01::Input("U").getKey() == sf::Keyboard::Key::U);
+    REQUIRE(segment01::Input("V").getKey() == sf::Keyboard::Key::V);
+    REQUIRE(segment01::Input("W").getKey() == sf::Keyboard::Key::W);
+    REQUIRE(segment01::Input("X").getKey() == sf::Keyboard::Key::X);
+    REQUIRE(segment01::Input("Y").getKey() == sf::Keyboard::Key::Y);
+    REQUIRE(segment01::Input("Z").getKey() == sf::Keyboard::Key::Z);
+    REQUIRE(segment01::Input("Num0").getKey() == sf::Keyboard::Key::Num0);
+    REQUIRE(segment01::Input("Num1").getKey() == sf::Keyboard::Key::Num1);
+    REQUIRE(segment01::Input("Num2").getKey() == sf::Keyboard::Key::Num2);
+    REQUIRE(segment01::Input("Num3").getKey() == sf::Keyboard::Key::Num3);
+    REQUIRE(segment01::Input("Num4").getKey() == sf::Keyboard::Key::Num4);
+    REQUIRE(segment01::Input("Num5").getKey() == sf::Keyboard::Key::Num5);
+    REQUIRE(segment01::Input("Num6").getKey() == sf::Keyboard::Key::Num6);
+    REQUIRE(segment01::Input("Num7").getKey() == sf::Keyboard::Key::Num7);
+    REQUIRE(segment01::Input("Num8").getKey() == sf::Keyboard::Key::Num8);
+    REQUIRE(segment01::Input("Num9").getKey() == sf::Keyboard::Key::Num9);
+    REQUIRE(segment01::Input("Escape").getKey() == sf::Keyboard::Key::Escape);
+    REQUIRE(segment01::Input("LControl").getKey() ==
+            sf::Keyboard::Key::LControl);
+    REQUIRE(segment01::Input("LShift").getKey() == sf::Keyboard::Key::LShift);
+    REQUIRE(segment01::Input("LAlt").getKey() == sf::Keyboard::Key::LAlt);
+    REQUIRE(segment01::Input("LSystem").getKey() == sf::Keyboard::Key::LSystem);
+    REQUIRE(segment01::Input("RControl").getKey() ==
+            sf::Keyboard::Key::RControl);
+    REQUIRE(segment01::Input("RShift").getKey() == sf::Keyboard::Key::RShift);
+    REQUIRE(segment01::Input("RAlt").getKey() == sf::Keyboard::Key::RAlt);
+    REQUIRE(segment01::Input("RSystem").getKey() == sf::Keyboard::Key::RSystem);
+    REQUIRE(segment01::Input("Menu").getKey() == sf::Keyboard::Key::Menu);
+    REQUIRE(segment01::Input("LBracket").getKey() ==
+            sf::Keyboard::Key::LBracket);
+    REQUIRE(segment01::Input("RBracket").getKey() ==
+            sf::Keyboard::Key::RBracket);
+    REQUIRE(segment01::Input("SemiColon").getKey() ==
+            sf::Keyboard::Key::Semicolon);
+    REQUIRE(segment01::Input("Comma").getKey() == sf::Keyboard::Key::Comma);
+    REQUIRE(segment01::Input("Period").getKey() == sf::Keyboard::Key::Period);
+    REQUIRE(segment01::Input("Quote").getKey() ==
+            sf::Keyboard::Key::Apostrophe);
+    REQUIRE(segment01::Input("Slash").getKey() == sf::Keyboard::Key::Slash);
+    REQUIRE(segment01::Input("BackSlash").getKey() ==
+            sf::Keyboard::Key::Backslash);
+    REQUIRE(segment01::Input("Tilde").getKey() == sf::Keyboard::Key::Equal);
+    REQUIRE(segment01::Input("Hyphen").getKey() == sf::Keyboard::Key::Hyphen);
+    REQUIRE(segment01::Input("Space").getKey() == sf::Keyboard::Key::Space);
+    REQUIRE(segment01::Input("Enter").getKey() == sf::Keyboard::Key::Enter);
+    REQUIRE(segment01::Input("BackSpace").getKey() ==
+            sf::Keyboard::Key::Backspace);
+    REQUIRE(segment01::Input("Tab").getKey() == sf::Keyboard::Key::Tab);
+    REQUIRE(segment01::Input("PageUp").getKey() == sf::Keyboard::Key::PageUp);
+    REQUIRE(segment01::Input("PageDown").getKey() ==
+            sf::Keyboard::Key::PageDown);
+    REQUIRE(segment01::Input("End").getKey() == sf::Keyboard::Key::End);
+    REQUIRE(segment01::Input("Home").getKey() == sf::Keyboard::Key::Home);
+    REQUIRE(segment01::Input("Insert").getKey() == sf::Keyboard::Key::Insert);
+    REQUIRE(segment01::Input("Delete").getKey() == sf::Keyboard::Key::Delete);
+    REQUIRE(segment01::Input("Add").getKey() == sf::Keyboard::Key::Add);
+    REQUIRE(segment01::Input("Substract").getKey() ==
+            sf::Keyboard::Key::Subtract);
+    REQUIRE(segment01::Input("Multiply").getKey() ==
+            sf::Keyboard::Key::Multiply);
+    REQUIRE(segment01::Input("Divide").getKey() == sf::Keyboard::Key::Divide);
+    REQUIRE(segment01::Input("Left").getKey() == sf::Keyboard::Key::Left);
+    REQUIRE(segment01::Input("Right").getKey() == sf::Keyboard::Key::Right);
+    REQUIRE(segment01::Input("Up").getKey() == sf::Keyboard::Key::Up);
+    REQUIRE(segment01::Input("Down").getKey() == sf::Keyboard::Key::Down);
+    REQUIRE(segment01::Input("Numpad0").getKey() == sf::Keyboard::Key::Numpad0);
+    REQUIRE(segment01::Input("Numpad1").getKey() == sf::Keyboard::Key::Numpad1);
+    REQUIRE(segment01::Input("Numpad2").getKey() == sf::Keyboard::Key::Numpad2);
+    REQUIRE(segment01::Input("Numpad3").getKey() == sf::Keyboard::Key::Numpad3);
+    REQUIRE(segment01::Input("Numpad4").getKey() == sf::Keyboard::Key::Numpad4);
+    REQUIRE(segment01::Input("Numpad5").getKey() == sf::Keyboard::Key::Numpad5);
+    REQUIRE(segment01::Input("Numpad6").getKey() == sf::Keyboard::Key::Numpad6);
+    REQUIRE(segment01::Input("Numpad7").getKey() == sf::Keyboard::Key::Numpad7);
+    REQUIRE(segment01::Input("Numpad8").getKey() == sf::Keyboard::Key::Numpad8);
+    REQUIRE(segment01::Input("Numpad9").getKey() == sf::Keyboard::Key::Numpad9);
+    REQUIRE(segment01::Input("F1").getKey() == sf::Keyboard::Key::F1);
+    REQUIRE(segment01::Input("F2").getKey() == sf::Keyboard::Key::F2);
+    REQUIRE(segment01::Input("F3").getKey() == sf::Keyboard::Key::F3);
+    REQUIRE(segment01::Input("F4").getKey() == sf::Keyboard::Key::F4);
+    REQUIRE(segment01::Input("F5").getKey() == sf::Keyboard::Key::F5);
+    REQUIRE(segment01::Input("F6").getKey() == sf::Keyboard::Key::F6);
+    REQUIRE(segment01::Input("F7").getKey() == sf::Keyboard::Key::F7);
+    REQUIRE(segment01::Input("F8").getKey() == sf::Keyboard::Key::F8);
+    REQUIRE(segment01::Input("F9").getKey() == sf::Keyboard::Key::F9);
+    REQUIRE(segment01::Input("F10").getKey() == sf::Keyboard::Key::F10);
+    REQUIRE(segment01::Input("F11").getKey() == sf::Keyboard::Key::F11);
+    REQUIRE(segment01::Input("F12").getKey() == sf::Keyboard::Key::F12);
+    REQUIRE(segment01::Input("F13").getKey() == sf::Keyboard::Key::F13);
+    REQUIRE(segment01::Input("F14").getKey() == sf::Keyboard::Key::F14);
+    REQUIRE(segment01::Input("F15").getKey() == sf::Keyboard::Key::F15);
+    REQUIRE(segment01::Input("Pause").getKey() == sf::Keyboard::Key::Pause);
+    REQUIRE(segment01::Input("LeftMouse").getButton() ==
+            sf::Mouse::Button::Left);
+    REQUIRE(segment01::Input("RightMouse").getButton() ==
+            sf::Mouse::Button::Right);
+    REQUIRE(segment01::Input("MiddleMouse").getButton() ==
+            sf::Mouse::Button::Middle);
+    REQUIRE(segment01::Input("XButton1").getButton() ==
+            sf::Mouse::Button::Extra1);
+    REQUIRE(segment01::Input("XButton2").getButton() ==
+            sf::Mouse::Button::Extra2);
+    REQUIRE(segment01::Input("XAxis-").getAxis() == sf::Joystick::Axis::X);
+    REQUIRE(segment01::Input("XAxis+").getAxis() == sf::Joystick::Axis::X);
+    REQUIRE(segment01::Input("YAxis-").getAxis() == sf::Joystick::Axis::Y);
+    REQUIRE(segment01::Input("YAxis+").getAxis() == sf::Joystick::Axis::Y);
+    REQUIRE(segment01::Input("XAxis-0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("XAxis+0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("YAxis-0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("YAxis+0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("ZAxis-0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("ZAxis+0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("RAxis-0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("RAxis+0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("RAxis-0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("RAxis+0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("UAxis-0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("UAxis+0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("VAxis-0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("VAxis+0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("PovXAxis-0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("PovXAxis+0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("PovYAxis-0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("PovYAxis+0").getIdJoystick() == 0);
+    REQUIRE(segment01::Input("JoystickButton0-0").getButtonJoyStick() == 0);
+    REQUIRE(segment01::Input("JoystickButton0-1").getButtonJoyStick() == 1);
+
+    REQUIRE(segment01::Input(segment01::Input()).getTypeInput() ==
+            segment01::Input::TypeInput::ERROR_TYPE_INPUT);
+
+    REQUIRE(segment01::Input(sf::Keyboard::Key::A).toString() == "A");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::B).toString() == "B");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::C).toString() == "C");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::D).toString() == "D");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::E).toString() == "E");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F).toString() == "F");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::G).toString() == "G");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::H).toString() == "H");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::I).toString() == "I");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::J).toString() == "J");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::K).toString() == "K");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::L).toString() == "L");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::M).toString() == "M");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::N).toString() == "N");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::O).toString() == "O");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::P).toString() == "P");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Q).toString() == "Q");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::R).toString() == "R");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::S).toString() == "S");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::T).toString() == "T");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::U).toString() == "U");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::V).toString() == "V");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::W).toString() == "W");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::X).toString() == "X");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Y).toString() == "Y");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Z).toString() == "Z");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Num0).toString() == "Num0");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Num1).toString() == "Num1");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Num2).toString() == "Num2");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Num3).toString() == "Num3");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Num4).toString() == "Num4");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Num5).toString() == "Num5");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Num6).toString() == "Num6");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Num7).toString() == "Num7");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Num8).toString() == "Num8");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Num9).toString() == "Num9");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Escape).toString() == "Escape");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::LControl).toString() ==
+            "LControl");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::LShift).toString() == "LShift");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::LAlt).toString() == "LAlt");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::LSystem).toString() ==
+            "LSystem");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::RControl).toString() ==
+            "RControl");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::RShift).toString() == "RShift");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::RAlt).toString() == "RAlt");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::RSystem).toString() ==
+            "RSystem");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Menu).toString() == "Menu");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::LBracket).toString() ==
+            "LBracket");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::RBracket).toString() ==
+            "RBracket");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Semicolon).toString() ==
+            "SemiColon");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Comma).toString() == "Comma");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Period).toString() == "Period");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Apostrophe).toString() ==
+            "Quote");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Slash).toString() == "Slash");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Backslash).toString() ==
+            "BackSlash");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Equal).toString() == "Tilde");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Hyphen).toString() == "Hyphen");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Space).toString() == "Space");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Enter).toString() == "Enter");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Backspace).toString() ==
+            "BackSpace");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Tab).toString() == "Tab");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::PageUp).toString() == "PageUp");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::PageDown).toString() ==
+            "PageDown");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::End).toString() == "End");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Home).toString() == "Home");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Insert).toString() == "Insert");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Delete).toString() == "Delete");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Add).toString() == "Add");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Subtract).toString() ==
+            "Substract");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Multiply).toString() ==
+            "Multiply");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Divide).toString() == "Divide");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Left).toString() == "Left");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Right).toString() == "Right");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Up).toString() == "Up");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Down).toString() == "Down");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Numpad0).toString() ==
+            "Numpad0");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Numpad1).toString() ==
+            "Numpad1");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Numpad2).toString() ==
+            "Numpad2");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Numpad3).toString() ==
+            "Numpad3");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Numpad4).toString() ==
+            "Numpad4");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Numpad5).toString() ==
+            "Numpad5");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Numpad6).toString() ==
+            "Numpad6");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Numpad7).toString() ==
+            "Numpad7");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Numpad8).toString() ==
+            "Numpad8");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Numpad9).toString() ==
+            "Numpad9");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F1).toString() == "F1");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F2).toString() == "F2");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F3).toString() == "F3");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F4).toString() == "F4");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F5).toString() == "F5");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F6).toString() == "F6");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F7).toString() == "F7");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F8).toString() == "F8");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F9).toString() == "F9");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F10).toString() == "F10");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F11).toString() == "F11");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F12).toString() == "F12");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F13).toString() == "F13");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F14).toString() == "F14");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::F15).toString() == "F15");
+    REQUIRE(segment01::Input(sf::Keyboard::Key::Pause).toString() == "Pause");
+    REQUIRE(segment01::Input(sf::Mouse::Button::Left).toString() ==
+            "LeftMouse");
+    REQUIRE(segment01::Input(sf::Mouse::Button::Right).toString() ==
+            "RightMouse");
+    REQUIRE(segment01::Input(sf::Mouse::Button::Middle).toString() ==
+            "MiddleMouse");
+    REQUIRE(segment01::Input(sf::Mouse::Button::Extra1).toString() ==
+            "XButton1");
+    REQUIRE(segment01::Input(sf::Mouse::Button::Extra2).toString() ==
+            "XButton2");
+    REQUIRE(segment01::Input(sf::Joystick::Axis::X, 0, true).toString() ==
+            "XAxis+0");
+    REQUIRE(segment01::Input(sf::Joystick::Axis::Y, 0, false).toString() ==
+            "YAxis-0");
+    REQUIRE(segment01::Input(sf::Joystick::Axis::Z, 0, false).toString() ==
+            "ZAxis-0");
+    REQUIRE(segment01::Input(sf::Joystick::Axis::R, 0, false).toString() ==
+            "RAxis-0");
+    REQUIRE(segment01::Input(sf::Joystick::Axis::U, 0, false).toString() ==
+            "UAxis-0");
+    REQUIRE(segment01::Input(sf::Joystick::Axis::V, 0, false).toString() ==
+            "VAxis-0");
+    REQUIRE(segment01::Input(sf::Joystick::Axis::PovX, 0, false).toString() ==
+            "PovXAxis-0");
+    REQUIRE(segment01::Input(sf::Joystick::Axis::PovY, 0, false).toString() ==
+            "PovYAxis-0");
+    REQUIRE(segment01::Input(0, 0).toString() == "JoystickButton0-0");
+    REQUIRE(segment01::Input("error").toString() == "error");
+
+    REQUIRE(segment01::Input("A").isPressed() == false);
+    REQUIRE(segment01::Input("LeftMouse").isPressed() == false);
+    REQUIRE(segment01::Input("XAxis-0").isPressed() == false);
+    REQUIRE(segment01::Input("XAxis+0").isPressed() == false);
+    REQUIRE(segment01::Input("JoystickButton0-0").isPressed() == false);
+    REQUIRE(segment01::Input("error").isPressed() == false);
+
+    REQUIRE(segment01::Input("XAxis-0").getSignAxis() == false);
+    REQUIRE(segment01::Input::getJoystickSensitivity() == 50);
+    segment01::Input::setJoystickSensitivity(60);
+    REQUIRE(segment01::Input::getJoystickSensitivity() == 60);
+
+    REQUIRE(segment01::Input("A") != segment01::Input("LeftMouse"));
+    REQUIRE(segment01::Input("A") != segment01::Input("B"));
+    REQUIRE(segment01::Input("LeftMouse") != segment01::Input("RightMouse"));
+    REQUIRE(segment01::Input("XAxis-0") != segment01::Input("XAxis+0"));
+    REQUIRE(segment01::Input("XAxis-0") != segment01::Input("YAxis-0"));
+    REQUIRE(segment01::Input("XAxis-0") != segment01::Input("XAxis-1"));
+    REQUIRE(segment01::Input("JoystickButton0-0") !=
+            segment01::Input("JoystickButton1-0"));
+    REQUIRE(segment01::Input("JoystickButton0-0") !=
+            segment01::Input("JoystickButton0-1"));
+    REQUIRE(segment01::Input("error") != segment01::Input("error"));
+}
