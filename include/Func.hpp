@@ -108,6 +108,10 @@ public:
     utf32ToUtf8(std::u32string::const_iterator be,
                 const std::u32string::const_iterator en,
                 std::back_insert_iterator<std::string> output);
+
+    static std::u32string str8Tostr32(const std::string_view &s);
+
+    static std::string str32Tostr8(const std::u32string_view &s);
 };
 
 } // namespace segment01

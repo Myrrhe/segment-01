@@ -99,7 +99,6 @@ jobs:
       # 9
       - name: Generate coverage report
         run: |
-          dir build\CMakeFiles\segment01.dir\src
           gcovr --root . --sonarqube --exclude-throw-branches --output coverage.xml
       # 10
       - name: SonarQube Scan
