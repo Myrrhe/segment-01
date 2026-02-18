@@ -19,7 +19,7 @@
 
 #include "text/BlockInfoText.hpp"
 #include "text/InfoText.hpp"
-#include "Logger.hpp"
+#include "text/LeafText.hpp"
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
@@ -39,7 +39,7 @@ TEST_CASE("Blockinfotext", "[blockinfotext]")
     auto block4 =
         segment01::BlockInfoText(U"cSize=30,leSpace=1;1,leSpaceFix=1,liSpace=1,"
                                  U"style=0,fColor=0,oColor=0,thick=0,error");
-    // REQUIRE(!block4.isEqual(block2));
+    REQUIRE(!block4.isEqual(segment01::LeafText()));
     REQUIRE(block4.getFont() == nullptr);
     REQUIRE(block4.getCharSize() == 30);
     REQUIRE(!std::get<0>(block4.getLetterSpacing()));
@@ -61,6 +61,11 @@ TEST_CASE("Blockinfotext", "[blockinfotext]")
     REQUIRE(block4.isUseful());
     block4 += segment01::BlockInfoText();
     block4 += block4;
-    // segment01::Logger().info(block4.toStr());
+    REQUIRE(block4.toStr() ==
+            U"<cSize=30,leSpace=0;1,liSpace=1,style=0,fColor=0,oColor=0>");
+    REQUIRE(
+        !(segment01::BlockInfoText() + segment01::BlockInfoText()).isUseful());
+    REQUIRE(block4 == block4);
+    REQUIRE(!(block4 != block4));
     block2.release();
 }
