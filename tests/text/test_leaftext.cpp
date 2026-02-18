@@ -18,18 +18,27 @@
 ////////////////////////////////////////////////////////////
 
 #include "text/BlockClosingText.hpp"
+#include "text/LeafText.hpp"
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Blockclosingtext", "[blockclosingtext]")
+TEST_CASE("Leaftext", "[leaftext]")
 {
+    const auto leaf1 = segment01::LeafText();
+    auto leaf2 = segment01::LeafText(U"Hello world");
+    auto leaf3 = segment01::LeafText(leaf2);
+    leaf2 = leaf1;
+    REQUIRE(leaf1.getType() == segment01::NodeText::Type::LEAF);
+    REQUIRE(leaf1.isEmpty());
+    REQUIRE(!leaf3.isEmpty());
+    REQUIRE(leaf3.getStr() == U"Hello world");
+    REQUIRE(leaf3.toStr() == U"Hello world");
+    REQUIRE(leaf3.getSize() == 11);
+    REQUIRE(leaf1.isEqual(leaf2));
+    REQUIRE(!leaf1.isEqual(leaf3));
     const auto block1 = segment01::BlockClosingText();
-    REQUIRE(block1.getType() == segment01::NodeText::Type::BLOCKCLOSING);
-    segment01::BlockClosingText block2 = block1;
-    block2 = block1;
-    REQUIRE(block1.isEqual(block2));
-    REQUIRE(block1.getStr() == U"");
-    REQUIRE(block1.toStr() == U"</>");
-    REQUIRE(block1 == block2);
-    REQUIRE(!(block1 != block2));
-    block2.release();
+    REQUIRE(!leaf1.isEqual(block1));
+    REQUIRE(leaf1 == leaf2);
+    REQUIRE(!(leaf1 == leaf3));
+    REQUIRE(leaf1 != leaf3);
+    leaf3.release();
 }

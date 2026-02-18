@@ -17,18 +17,20 @@
 //
 ////////////////////////////////////////////////////////////
 
-#include "text/BlockClosingText.hpp"
+#include "text/BlockText.hpp"
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Blockclosingtext", "[blockclosingtext]")
+TEST_CASE("Blocktext", "[blocktext]")
 {
-    const auto block1 = segment01::BlockClosingText();
-    REQUIRE(block1.getType() == segment01::NodeText::Type::BLOCKCLOSING);
-    segment01::BlockClosingText block2 = block1;
+    const auto block1 = segment01::BlockText();
+    REQUIRE(block1.getType() == segment01::NodeText::Type::BLOCK);
+    segment01::BlockText block2 = block1;
     block2 = block1;
+    const auto block3 = segment01::BlockText(U"");
+    const auto block4 = segment01::BlockText(U"test");
     REQUIRE(block1.isEqual(block2));
     REQUIRE(block1.getStr() == U"");
-    REQUIRE(block1.toStr() == U"</>");
+    REQUIRE(block1.toStr() == U"");
     REQUIRE(block1 == block2);
     REQUIRE(!(block1 != block2));
     block2.release();

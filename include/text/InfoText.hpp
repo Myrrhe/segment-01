@@ -94,8 +94,46 @@ public:
 
     template <Info typeCode> typename Typer<typeCode>::Type getInfo() const;
 
-    template <Info typeCode>
-    void setInfo(typename Typer<typeCode>::Type const t);
+    template <InfoText::Info typeCode>
+    void setInfo(typename Typer<typeCode>::Type const t)
+    {
+        if constexpr (typeCode == Info::FONT)
+        {
+            font = t;
+        }
+        else if constexpr (typeCode == Info::CHAR_SIZE)
+        {
+            charSize = t;
+        }
+        else if constexpr (typeCode == Info::LETTER_SPACING)
+        {
+            letterSpacing = t;
+        }
+        else if constexpr (typeCode == Info::LINE_SPACING_FACTOR)
+        {
+            lineSpacingFactor = t;
+        }
+        else if constexpr (typeCode == Info::STYLE)
+        {
+            style = t;
+        }
+        else if constexpr (typeCode == Info::FILL_COLOR)
+        {
+            fillColor = t;
+        }
+        else if constexpr (typeCode == Info::OUTLINE_COLOR)
+        {
+            outlineColor = t;
+        }
+        else if constexpr (typeCode == Info::THICKNESS)
+        {
+            thickness = t;
+        }
+        else
+        {
+            // Nothing to do
+        }
+    }
 
     std::u32string getValStr(const Info i) const;
 

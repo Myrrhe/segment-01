@@ -232,55 +232,6 @@ InfoText::getInfo<InfoText::Info::THICKNESS>() const
     return thickness;
 }
 
-template <>
-void InfoText::setInfo<InfoText::Info::FONT>(
-    InfoText::Typer<InfoText::Info::FONT>::Type const t)
-{
-    font = t;
-}
-template <>
-void InfoText::setInfo<InfoText::Info::CHAR_SIZE>(
-    InfoText::Typer<InfoText::Info::CHAR_SIZE>::Type const t)
-{
-    charSize = t;
-}
-template <>
-void InfoText::setInfo<InfoText::Info::LETTER_SPACING>(
-    InfoText::Typer<InfoText::Info::LETTER_SPACING>::Type t)
-{
-    letterSpacing = t;
-}
-template <>
-void InfoText::setInfo<InfoText::Info::LINE_SPACING_FACTOR>(
-    InfoText::Typer<InfoText::Info::LINE_SPACING_FACTOR>::Type const t)
-{
-    lineSpacingFactor = t;
-}
-template <>
-void InfoText::setInfo<InfoText::Info::STYLE>(
-    InfoText::Typer<InfoText::Info::STYLE>::Type const t)
-{
-    style = t;
-}
-template <>
-void InfoText::setInfo<InfoText::Info::FILL_COLOR>(
-    InfoText::Typer<InfoText::Info::FILL_COLOR>::Type t)
-{
-    fillColor = t;
-}
-template <>
-void InfoText::setInfo<InfoText::Info::OUTLINE_COLOR>(
-    InfoText::Typer<InfoText::Info::OUTLINE_COLOR>::Type t)
-{
-    outlineColor = t;
-}
-template <>
-void InfoText::setInfo<InfoText::Info::THICKNESS>(
-    InfoText::Typer<InfoText::Info::THICKNESS>::Type const t)
-{
-    thickness = t;
-}
-
 std::u32string InfoText::getValStr(const Info i) const
 {
     std::u32string res = U"";
