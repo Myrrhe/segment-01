@@ -94,12 +94,20 @@ jobs:
       - name: Inspect
         shell: bash
         run: |
-            ls ..
+            echo "    ALPHA"
+            ls -a ..
+            echo "    BETA"
             ls -a
+            echo "    GAMMA"
             cd build
             ls -a
+            echo "    DELTA
             cd bin
             ls -a
+            echo "    EPSILON"
+            cd assets
+            ls -a
+            echo "    MU"
       # 8
       - name: Run unit tests (CTest)
         shell: bash
