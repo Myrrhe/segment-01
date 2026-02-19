@@ -94,8 +94,11 @@ jobs:
       - name: Inspect
         shell: bash
         run: |
+            ls ..
             ls -a
             cd build
+            ls -a
+            cd bin
             ls -a
       # 8
       - name: Run unit tests (CTest)
