@@ -62,4 +62,8 @@ TEST_CASE("Textcomp", "[textcomp]")
     REQUIRE_THAT(
         text2.getWidthWrap(),
         Catch::Matchers::WithinRel(1, segment01::Constant::m_epsilon_f));
+    // const auto chain1 = segment01::ChainText();
+    // const auto text3 =
+    //     segment01::TextComp(std::vector<const segment01::ChainText *>{&chain1},
+    //                         nullptr, segment01::InfoText::DefaultSize);
 }
