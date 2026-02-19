@@ -184,4 +184,6 @@ TEST_CASE("Func", "[func]")
     REQUIRE(segment01::Func::str8Tostr32("abcéàù") == U"abcéàù");
 
     REQUIRE(segment01::Func::str32Tostr8(U"abcéàù") == "abcéàù");
+
+    REQUIRE(segment01::Func::str16Tostr8(L"abcéàù") == "abcéàù");
 }

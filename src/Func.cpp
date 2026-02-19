@@ -637,4 +637,57 @@ std::string Func::str32Tostr8(const std::u32string_view &s)
     return res;
 }
 
+std::string Func::str16Tostr8(const std::wstring &input)
+{
+    static constexpr wchar_t MinHighSurrogate = 0xD800;
+    static constexpr wchar_t MaxHighSurrogate = 0xDBFF;
+    static constexpr uint32_t HighestSurrogate = 0xDFFFU;
+    static constexpr char32_t TwoPower16 = 0x1'00'00;
+
+    std::u32string tmp = U"";
+    const std::size_t inputSize = input.size();
+    tmp.reserve(inputSize);
+
+    for (std::size_t i = 0; i < inputSize; ++i)
+    {
+        const wchar_t wc = input[i];
+
+        // High surrogate
+        if (wc >= MinHighSurrogate && wc <= MaxHighSurrogate)
+        {
+            if (i + 1 < inputSize)
+            {
+                const wchar_t low = input[i + 1];
+
+                const auto low_u = static_cast<uint32_t>(low);
+                if (low_u >= MaxHighSurrogate + 1 && low_u <= HighestSurrogate)
+                {
+                    const char32_t codepoint =
+                        ((static_cast<char32_t>(wc - MinHighSurrogate) << 10) |
+                         (static_cast<char32_t>(low -
+                                                (MaxHighSurrogate + 1)))) +
+                        TwoPower16;
+
+                    tmp.push_back(codepoint);
+                    // skip low surrogate
+                    ++i;
+                    continue;
+                }
+            }
+            // surrogate invalide
+            tmp.push_back(U'?');
+        }
+        else
+        {
+            tmp.push_back(static_cast<char32_t>(wc));
+        }
+    }
+
+    std::string result;
+    static_cast<void>(
+        utf32ToUtf8(tmp.begin(), tmp.end(), std::back_inserter(result)));
+
+    return result;
+}
+
 } // namespace segment01

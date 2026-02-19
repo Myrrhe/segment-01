@@ -50,6 +50,7 @@ public:
     static sf::Vector2<uint64_t> getMonitorSize();
     [[nodiscard]] static int64_t getWallpaperStyle();
     static void setProcessDPIAware();
+    static std::wstring getExecutablePath();
 
     static const char SlashC;
     static const std::string Slash;

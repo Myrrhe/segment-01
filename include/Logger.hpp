@@ -70,7 +70,24 @@ void appendToStream(std::ostringstream& oss, const T& value)
             }
             else
             {
-                // fallback
+                // Fallback
+                converted += '?';
+            }
+        }
+        oss << converted;
+    }
+    else if constexpr (std::is_same_v<T, std::wstring>)
+    {
+        std::string converted;
+        for (wchar_t c : value)
+        {
+            if (c <= twoPowerSevenMinusOne)
+            {
+                converted += static_cast<char>(c);
+            }
+            else
+            {
+                // Fallback
                 converted += '?';
             }
         }

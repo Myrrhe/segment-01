@@ -112,6 +112,8 @@ public:
     static std::u32string str8Tostr32(const std::string_view &s);
 
     static std::string str32Tostr8(const std::u32string_view &s);
+
+    static std::string str16Tostr8(const std::wstring &input);
 };
 
 } // namespace segment01

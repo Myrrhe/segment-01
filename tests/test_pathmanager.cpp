@@ -17,8 +17,11 @@
 //
 ////////////////////////////////////////////////////////////
 
+#include "Func.hpp"
 #include "Logger.hpp"
+#include "OsManager.hpp"
 #include "PathManager.hpp"
+#include <catch2/catch_session.hpp>
 #include <catch2/catch_test_macros.hpp>
 
 TEST_CASE("PathManager", "[pathmanager]")
@@ -44,7 +47,10 @@ TEST_CASE("PathManager", "[pathmanager]")
     REQUIRE(segment01::PathManager::getPath(
                 segment01::PathManager::Dir::SCREENSHOT) ==
             "assets\\screenshot");
+
     segment01::Logger::setLevel(segment01::LogLevel::NONE);
     segment01::PathManager::read();
+    segment01::PathManager::setPath(segment01::Func::str16Tostr8(
+        segment01::OsManager::getExecutablePath()));
     segment01::Logger::setLevel(segment01::LogLevel::INFO);
 }
