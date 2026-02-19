@@ -18,6 +18,7 @@
 ////////////////////////////////////////////////////////////
 
 #include "FontManager.hpp"
+#include "Logger.hpp"
 #include "PathManager.hpp"
 #include "text/TextComp.hpp"
 #include <catch2/catch_test_macros.hpp>
@@ -68,11 +69,12 @@ TEST_CASE("Textcomp", "[textcomp]")
     segment01::PathManager::setPath(segment01::Func::str16Tostr8(
         segment01::OsManager::getExecutablePath()));
     segment01::FontManager::initialize();
-    // segment01::FontManager::getFont("LinBiolinum_RI.ttf");
 
-    // const auto chain1 = segment01::ChainText();
-    // const auto text3 =
-    //     segment01::TextComp(std::vector<const segment01::ChainText
-    //     *>{&chain1},
-    //                         nullptr, segment01::InfoText::DefaultSize);
+    const auto chain1 = segment01::ChainText(
+        UR"(<cSize=30></>alpha<cSize=30>beta</>gamma\<\\)");
+    const auto text3 = segment01::TextComp(
+        std::vector<const segment01::ChainText *>{&chain1},
+        *segment01::FontManager::getFont("LinBiolinum_RI.ttf"),
+        segment01::InfoText::DefaultSize);
+    segment01::Logger().info(text3.getLocalBounds());
 }
