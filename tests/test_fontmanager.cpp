@@ -23,4 +23,6 @@
 TEST_CASE("Fontmanager", "[fontmanager]")
 {
     segment01::FontManager::initialize();
+    REQUIRE(segment01::FontManager::getFont("error") == nullptr);
+    REQUIRE(segment01::FontManager::getFont("LinBiolinum_RI.ttf") != nullptr);
 }

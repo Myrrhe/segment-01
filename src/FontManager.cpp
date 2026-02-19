@@ -57,7 +57,14 @@ void FontManager::initialize()
 
 const sf::Font *FontManager::getFont(const std::string &str)
 {
-    return &fonts[str];
+    sf::Font const *res = nullptr;
+    if (const std::unordered_map<std::string, sf::Font>::iterator it =
+            fonts.find(str);
+        it != fonts.end())
+    {
+        res = &it->second;
+    }
+    return res;
 }
 
 } // namespace segment01
