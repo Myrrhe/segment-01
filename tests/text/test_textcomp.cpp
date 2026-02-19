@@ -17,6 +17,8 @@
 //
 ////////////////////////////////////////////////////////////
 
+#include "FontManager.hpp"
+#include "PathManager.hpp"
 #include "text/TextComp.hpp"
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
@@ -62,8 +64,15 @@ TEST_CASE("Textcomp", "[textcomp]")
     REQUIRE_THAT(
         text2.getWidthWrap(),
         Catch::Matchers::WithinRel(1, segment01::Constant::m_epsilon_f));
+
+    segment01::PathManager::setPath(segment01::Func::str16Tostr8(
+        segment01::OsManager::getExecutablePath()));
+    segment01::FontManager::initialize();
+    // segment01::FontManager::getFont("LinBiolinum_RI.ttf");
+
     // const auto chain1 = segment01::ChainText();
     // const auto text3 =
-    //     segment01::TextComp(std::vector<const segment01::ChainText *>{&chain1},
+    //     segment01::TextComp(std::vector<const segment01::ChainText
+    //     *>{&chain1},
     //                         nullptr, segment01::InfoText::DefaultSize);
 }
