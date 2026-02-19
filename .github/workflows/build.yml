@@ -90,6 +90,13 @@ jobs:
           }
           Write-Host "Using build-wrapper at: $bwExe"
           & $bwExe --out-dir $env:BUILD_WRAPPER_OUT_DIR cmake --build build --config Debug
+      # 7bis
+      - name: Inspect
+        shell: bash
+        run: |
+            ls -a
+            cd build
+            ls -a
       # 8
       - name: Run unit tests (CTest)
         shell: bash
