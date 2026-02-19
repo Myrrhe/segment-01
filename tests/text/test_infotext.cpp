@@ -165,6 +165,10 @@ TEST_CASE("Infotext", "[infotext]")
 
     info4 = info3;
     REQUIRE(info4 == info3);
+    const auto font1 = sf::Font();
+    info4.setFont(&font1);
+    REQUIRE(info4 != info3);
+    info4.setFont(info3.getFont());
     info4.setCharSize(info3.getCharSize() - 1);
     REQUIRE(info4 != info3);
     info4.setCharSize(info3.getCharSize());

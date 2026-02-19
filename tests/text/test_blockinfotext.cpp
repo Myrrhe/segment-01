@@ -59,10 +59,15 @@ TEST_CASE("Blockinfotext", "[blockinfotext]")
         !block4.isUsed(static_cast<uint64_t>(segment01::InfoText::Info::FONT)));
     REQUIRE(block4.getInfoText().getFont() == nullptr);
     REQUIRE(block4.isUseful());
-    block4 += segment01::BlockInfoText();
+    auto block5 = segment01::BlockInfoText();
+    block4 += block5;
     block4 += block4;
     REQUIRE(block4.toStr() ==
             U"<cSize=30,leSpace=0;1,liSpace=1,style=0,fColor=0,oColor=0>");
+    const auto font1 = sf::Font();
+    block5 = segment01::BlockInfoText(
+        segment01::InfoText(&font1, segment01::InfoText::DefaultSize));
+    block4 += block5;
     REQUIRE(
         !(segment01::BlockInfoText() + segment01::BlockInfoText()).isUseful());
     REQUIRE(block4 == block4);

@@ -161,8 +161,7 @@ private:
 
     friend bool operator==(const InfoText &left, const InfoText &right)
     {
-        bool res = true;
-        res = res && (left.font == right.font);
+        bool res = left.font == right.font;
         res = res && (left.charSize == right.charSize);
         res = res && (std::get<0>(left.letterSpacing) ==
                       std::get<0>(right.letterSpacing));
