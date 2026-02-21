@@ -22,6 +22,7 @@
 #include "StaticObject.hpp"
 #include "Types.hpp"
 #include <cstdint>
+#include <string>
 
 namespace segment01
 {
@@ -29,6 +30,11 @@ class Constant final : public StaticObject
 {
 public:
     static constexpr uint32_t MaxColor = 255;
+
+    static constexpr std::string_view ImgExtension = ".png";
+    static constexpr uint64_t E6 = 1e6;
+    static const std::string EmptyStr;
+    static const std::u32string EmptyStr32;
 
     static constexpr float64_t m_e = 2.71828182845904523536;
     static constexpr float64_t m_log2e = 1.44269504088896340736;

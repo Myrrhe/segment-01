@@ -58,4 +58,5 @@ TEST_CASE("Windowmanager", "[windowmanager]")
 
     REQUIRE(segment01::WindowManager::getCharEntered() == 0);
     REQUIRE(segment01::WindowManager::getKeyPressed() == sf::Keyboard::Key::A);
+    segment01::WindowManager::terminate();
 }

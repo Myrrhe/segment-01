@@ -130,6 +130,7 @@ void WindowManager::setViewTarget(sf::RenderTarget &renderTarget)
     switch (stateView.top())
     {
     case IdView::MAIN: {
+        const std::size_t viewId = 0;
         mainScale = std::min(static_cast<float32_t>(sizeTarget.x) /
                                  static_cast<float32_t>(Width),
                              static_cast<float32_t>(sizeTarget.y) /
@@ -147,10 +148,10 @@ void WindowManager::setViewTarget(sf::RenderTarget &renderTarget)
                 sf::Vector2<float32_t>(static_cast<float32_t>(sizeTarget.x),
                                        static_cast<float32_t>(sizeTarget.y));
         }
-        views[0] = sf::View(
+        views[viewId] = sf::View(
             sf::Rect<float32_t>(sf::Vector2<float32_t>(0.0f, 0.0f),
                                 sf::Vector2<float32_t>(Width, Height)));
-        views[0].setViewport(sf::Rect<float32_t>(
+        views[viewId].setViewport(sf::Rect<float32_t>(
             sf::Vector2<float32_t>(
                 ((rendingSize.x - (Width * mainScale)) * 0.5f) / rendingSize.x,
                 ((rendingSize.y - (Height * mainScale)) * 0.5f) /
@@ -159,10 +160,11 @@ void WindowManager::setViewTarget(sf::RenderTarget &renderTarget)
                 1.0f - ((rendingSize.x - (Width * mainScale)) / rendingSize.x),
                 1.0f -
                     ((rendingSize.y - (Height * mainScale)) / rendingSize.y))));
-        renderTarget.setView(views[0]);
+        renderTarget.setView(views[viewId]);
         break;
     }
     case IdView::UI: {
+        const std::size_t viewId = 1;
         auto rendingSize = sf::Vector2<float32_t>(0, 0);
         if (Fullscreen)
         {
@@ -176,10 +178,10 @@ void WindowManager::setViewTarget(sf::RenderTarget &renderTarget)
                 sf::Vector2<float32_t>(static_cast<float32_t>(sizeTarget.x),
                                        static_cast<float32_t>(sizeTarget.y));
         }
-        views[1] = sf::View(
+        views[viewId] = sf::View(
             sf::Rect<float32_t>(sf::Vector2<float32_t>(uiX, uiY),
                                 sf::Vector2<float32_t>(uiWidth, uiHeight)));
-        views[1].setViewport(sf::Rect<float32_t>(
+        views[viewId].setViewport(sf::Rect<float32_t>(
             sf::Vector2<float32_t>(
                 (((rendingSize.x - (Width * mainScale)) * 0.5f) +
                  (uiX * mainScale)) /
@@ -189,10 +191,11 @@ void WindowManager::setViewTarget(sf::RenderTarget &renderTarget)
                     rendingSize.y),
             sf::Vector2<float32_t>((uiWidth * mainScale) / rendingSize.x,
                                    (uiHeight * mainScale) / rendingSize.y)));
-        renderTarget.setView(views[1]);
+        renderTarget.setView(views[viewId]);
         break;
     }
     case IdView::SHAKE: {
+        const std::size_t viewId = 2;
         mainScale = std::min(static_cast<float32_t>(sizeTarget.x) /
                                  static_cast<float32_t>(Width),
                              static_cast<float32_t>(sizeTarget.y) /
@@ -210,10 +213,10 @@ void WindowManager::setViewTarget(sf::RenderTarget &renderTarget)
                 sf::Vector2<float32_t>(static_cast<float32_t>(sizeTarget.x),
                                        static_cast<float32_t>(sizeTarget.y));
         }
-        views[2] = sf::View(
+        views[viewId] = sf::View(
             sf::Rect<float32_t>(sf::Vector2<float32_t>(0.0f, 0.0f),
                                 sf::Vector2<float32_t>(Width, Height)));
-        views[2].setViewport(sf::Rect<float32_t>(
+        views[viewId].setViewport(sf::Rect<float32_t>(
             sf::Vector2<float32_t>(
                 ((rendingSize.x - ((Width + (2.0f * offsetX)) * mainScale)) *
                  0.5f) /
@@ -225,17 +228,18 @@ void WindowManager::setViewTarget(sf::RenderTarget &renderTarget)
                 1.0f - ((rendingSize.x - (Width * mainScale)) / rendingSize.x),
                 1.0f -
                     ((rendingSize.y - (Height * mainScale)) / rendingSize.y))));
-        renderTarget.setView(views[2]);
+        renderTarget.setView(views[viewId]);
         break;
     }
     case IdView::WHOLE: {
-        views[3] = sf::View(
+        const std::size_t viewId = 3;
+        views[viewId] = sf::View(
             sf::Rect<float32_t>(sf::Vector2<float32_t>(0.0f, 0.0f),
                                 sf::Vector2<float32_t>(Width, Height)));
-        views[3].setViewport(
+        views[viewId].setViewport(
             sf::Rect<float32_t>(sf::Vector2<float32_t>(0.0f, 0.0f),
                                 sf::Vector2<float32_t>(1.0f, 1.0f)));
-        renderTarget.setView(views[3]);
+        renderTarget.setView(views[viewId]);
         break;
     }
     default: {

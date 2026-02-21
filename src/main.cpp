@@ -19,22 +19,29 @@
 
 #include "Logger.hpp"
 #include "OsManager.hpp"
+#include "PathManager.hpp"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <windows.h>
 
-int main(int /*argc*/, char ** /*argv*/, char ** /*options*/)
+int main(int /*argc*/, char **argv, char ** /*options*/)
 {
     static_cast<void>(segment01::Logger().info("aaa"));
+    static_cast<void>(
+        segment01::Logger().info(segment01::OsManager::getExecutablePath()));
+    static_cast<void>(segment01::Logger().info(argv[0]));
+    static_cast<void>(segment01::Logger().info(sizeof(wchar_t)));
 #ifdef _DEBUG
     std::cout << "Mode Debug, logs visibles dans la console\n";
 #else
     // Rediriger vers un fichier ou ignorer
 #endif
     segment01::OsManager::setProcessDPIAware();
+    segment01::PathManager::setPath(argv[0]);
     sf::RenderWindow window(sf::VideoMode(sf::Vector2<uint32_t>(200, 200)),
                             "SFML works!");
     sf::CircleShape shape(100.f);
+    
     shape.setFillColor(sf::Color::Green);
 
     while (window.isOpen())

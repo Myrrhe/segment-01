@@ -17,17 +17,10 @@
 //
 ////////////////////////////////////////////////////////////
 
-#include "FontManager.hpp"
-#include "Func.hpp"
-#include "OsManager.hpp"
-#include "PathManager.hpp"
-#include <catch2/catch_test_macros.hpp>
+#include "Constant.hpp"
 
-TEST_CASE("Fontmanager", "[fontmanager]")
+namespace segment01
 {
-    segment01::PathManager::setPath(segment01::Func::str16Tostr8(
-        segment01::OsManager::getExecutablePath()));
-    segment01::FontManager::initialize();
-    REQUIRE(segment01::FontManager::getFont("error") == nullptr);
-    REQUIRE(segment01::FontManager::getFont("LinBiolinum_RI.ttf") != nullptr);
-}
+    const std::string Constant::EmptyStr = "";
+    const std::u32string Constant::EmptyStr32 = U"";
+} // namespace segment01

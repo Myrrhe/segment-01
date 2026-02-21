@@ -17,28 +17,51 @@
 //
 ////////////////////////////////////////////////////////////
 
-#ifndef MOUSEWHEEL_HPP
-#define MOUSEWHEEL_HPP
-#include "OsManager.hpp"
-#include "StaticObject.hpp"
-#include "Types.hpp"
+#ifndef NODETEXT_HPP
+#define NODETEXT_HPP
 #include <cstdint>
+#include <string>
 
 namespace segment01
 {
 
-class MouseWheel final : public StaticObject
+class NodeText
 {
 public:
-    static void initialize();
+    enum class Type : uint64_t
+    {
+        LEAF,
+        BLOCK,
+        BLOCKINFO,
+        BLOCKCLOSING
+    };
 
-    [[nodiscard]] ATTR_PURE static float32_t getDeltaWheel();
-    static void setDeltaWheel(const float32_t newDeltaWheel);
+    /// Default constructor
+    NodeText();
+    /// Copy constructor
+    ///  \param other Object to copy from
+    NodeText(const NodeText &other);
+    /// Assignment operator
+    /// \param rhs Object to assign from
+    /// \return A reference to this
+    NodeText &operator=(const NodeText &rhs);
+    /// Default destructor
+    virtual ~NodeText();
 
-private:
-    static float32_t deltaWheel;
+    virtual void release() = 0;
+
+    virtual Type getType() const = 0;
+
+    virtual const std::u32string &getStr() const = 0;
+
+    // virtual bool operator==(const NodeText &right) const = 0;
+    // virtual bool operator!=(const NodeText &right) const = 0;
+
+    virtual bool isEqual(const NodeText &right) const = 0;
+
+    virtual std::u32string toStr() const = 0;
 };
 
 } // namespace segment01
 
-#endif // MOUSEWHEEL_HPP
+#endif // NODETEXT_HPP

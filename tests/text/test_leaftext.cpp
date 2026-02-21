@@ -17,17 +17,28 @@
 //
 ////////////////////////////////////////////////////////////
 
-#include "FontManager.hpp"
-#include "Func.hpp"
-#include "OsManager.hpp"
-#include "PathManager.hpp"
+#include "text/BlockClosingText.hpp"
+#include "text/LeafText.hpp"
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Fontmanager", "[fontmanager]")
+TEST_CASE("Leaftext", "[leaftext]")
 {
-    segment01::PathManager::setPath(segment01::Func::str16Tostr8(
-        segment01::OsManager::getExecutablePath()));
-    segment01::FontManager::initialize();
-    REQUIRE(segment01::FontManager::getFont("error") == nullptr);
-    REQUIRE(segment01::FontManager::getFont("LinBiolinum_RI.ttf") != nullptr);
+    const auto leaf1 = segment01::LeafText();
+    auto leaf2 = segment01::LeafText(U"Hello world");
+    auto leaf3 = segment01::LeafText(leaf2);
+    leaf2 = leaf1;
+    REQUIRE(leaf1.getType() == segment01::NodeText::Type::LEAF);
+    REQUIRE(leaf1.isEmpty());
+    REQUIRE(!leaf3.isEmpty());
+    REQUIRE(leaf3.getStr() == U"Hello world");
+    REQUIRE(leaf3.toStr() == U"Hello world");
+    REQUIRE(leaf3.getSize() == 11);
+    REQUIRE(leaf1.isEqual(leaf2));
+    REQUIRE(!leaf1.isEqual(leaf3));
+    const auto block1 = segment01::BlockClosingText();
+    REQUIRE(!leaf1.isEqual(block1));
+    REQUIRE(leaf1 == leaf2);
+    REQUIRE(!(leaf1 == leaf3));
+    REQUIRE(leaf1 != leaf3);
+    leaf3.release();
 }

@@ -25,4 +25,5 @@ TEST_CASE("Osmanager", "[osmanager]")
     static_cast<void>(segment01::OsManager::getMonitorSize());
     static_cast<void>(segment01::OsManager::getWallpaperStyle());
     segment01::OsManager::setProcessDPIAware();
+    static_cast<void>(segment01::OsManager::getExecutablePath());
 }

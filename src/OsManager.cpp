@@ -126,4 +126,42 @@ void OsManager::setProcessDPIAware()
 #elif _OSX
 #endif // __linux__
 }
+
+std::wstring OsManager::getExecutablePath()
+{
+#ifdef __linux__
+    char buffer[PATH_MAX];
+    ssize_t len = readlink("/proc/self/exe", buffer, sizeof(buffer) - 1);
+    if (len == -1)
+    {
+        throw std::runtime_error("readlink failed");
+    }
+    buffer[len] = '\0';
+    return std::string(buffer);
+#elif _WIN32
+    std::wstring res = L"";
+    std::wstring buffer(MAX_PATH, '\0');
+    if (const DWORD size =
+            ::GetModuleFileNameW(nullptr, buffer.data(), MAX_PATH);
+        size != 0)
+    {
+        res = std::wstring(buffer.data(), size);
+    }
+    else
+    {
+        throw std::runtime_error("GetModuleFileNameW failed");
+    }
+    return res;
+#elif _OSX
+    uint32_t size = 0;
+    _NSGetExecutablePath(nullptr, &size);
+    std::vector<char> buffer(size);
+    if (_NSGetExecutablePath(buffer.data(), &size) != 0)
+    {
+        throw std::runtime_error("Failed to get executable path");
+    }
+    return std::string(buffer.data());
+#endif // __linux__
+}
+
 } // namespace segment01

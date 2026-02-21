@@ -37,6 +37,68 @@ enum class LogLevel : uint64_t
     NONE,
 };
 
+template <typename T, typename = void>
+struct IsOstreamInsertable : public std::false_type {};
+
+template <typename T>
+struct IsOstreamInsertable<
+    T,
+    std::void_t<decltype(std::declval<std::ostream&>() << std::declval<T>())>
+> : public std::true_type {};
+
+template <typename T>
+inline constexpr bool is_ostream_insertable_v =
+    IsOstreamInsertable<T>::value;
+
+template <typename T>
+void appendToStream(std::ostringstream& oss, const T& value)
+{
+    static constexpr char32_t twoPowerSevenMinusOne = 0x7F;
+    if constexpr (is_ostream_insertable_v<T>)
+    {
+        oss << value;
+    }
+    else if constexpr (std::is_same_v<T, std::u32string>)
+    {
+        // Conversion UTF-32 → UTF-8
+        std::string converted;
+        for (char32_t c : value)
+        {
+            if (c <= twoPowerSevenMinusOne)
+            {
+                converted += static_cast<char>(c);
+            }
+            else
+            {
+                // Fallback
+                converted += '?';
+            }
+        }
+        oss << converted;
+    }
+    else if constexpr (std::is_same_v<T, std::wstring>)
+    {
+        std::string converted;
+        for (wchar_t c : value)
+        {
+            if (c <= twoPowerSevenMinusOne)
+            {
+                converted += static_cast<char>(c);
+            }
+            else
+            {
+                // Fallback
+                converted += '?';
+            }
+        }
+        oss << converted;
+    }
+    else
+    {
+        oss << "[UNSUPPORTED_TYPE]";
+    }
+}
+
 class Logger final
 {
 public:
@@ -76,7 +138,8 @@ public:
             }
 
             oss << getCurrentTime() << " - ";
-            (oss << ... << args);
+            // (oss << ... << args);
+            (appendToStream(oss, args), ...);
             m_output << oss.str() << '\n';
         }
         return *this;

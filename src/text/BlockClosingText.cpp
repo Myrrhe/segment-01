@@ -17,17 +17,41 @@
 //
 ////////////////////////////////////////////////////////////
 
-#include "FontManager.hpp"
-#include "Func.hpp"
-#include "OsManager.hpp"
-#include "PathManager.hpp"
-#include <catch2/catch_test_macros.hpp>
+#include "text/BlockClosingText.hpp"
+#include "Constant.hpp"
 
-TEST_CASE("Fontmanager", "[fontmanager]")
+namespace segment01
 {
-    segment01::PathManager::setPath(segment01::Func::str16Tostr8(
-        segment01::OsManager::getExecutablePath()));
-    segment01::FontManager::initialize();
-    REQUIRE(segment01::FontManager::getFont("error") == nullptr);
-    REQUIRE(segment01::FontManager::getFont("LinBiolinum_RI.ttf") != nullptr);
+
+BlockClosingText::BlockClosingText() : NodeText()
+{
+    // ctor
 }
+
+BlockClosingText::~BlockClosingText() = default;
+
+BlockClosingText::BlockClosingText(const BlockClosingText &other) = default;
+
+BlockClosingText &
+BlockClosingText::operator=(const BlockClosingText &rhs) = default;
+
+void BlockClosingText::release()
+{
+    // Nothing to do
+}
+
+NodeText::Type BlockClosingText::getType() const { return Type::BLOCKCLOSING; }
+
+bool BlockClosingText::isEqual(const NodeText &right) const
+{
+    return getType() == right.getType();
+}
+
+const std::u32string &BlockClosingText::getStr() const
+{
+    return Constant::EmptyStr32;
+}
+
+std::u32string BlockClosingText::toStr() const { return U"</>"; }
+
+} // namespace segment01

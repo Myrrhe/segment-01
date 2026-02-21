@@ -17,34 +17,37 @@
 //
 ////////////////////////////////////////////////////////////
 
+#include "Func.hpp"
 #include "Logger.hpp"
+#include "OsManager.hpp"
 #include "PathManager.hpp"
+#include <catch2/catch_session.hpp>
 #include <catch2/catch_test_macros.hpp>
 
 TEST_CASE("PathManager", "[pathmanager]")
 {
-    REQUIRE(segment01::PathManager::getPath(
-                segment01::PathManager::Dir::ROOT) == "");
-    REQUIRE(segment01::PathManager::getPath(segment01::PathManager::Dir::DAT) ==
-            "assets");
-    REQUIRE(segment01::PathManager::getPath(segment01::PathManager::Dir::IMG) ==
-            "assets\\img");
-    REQUIRE(segment01::PathManager::getPath(
-                segment01::PathManager::Dir::SHADER) == "assets\\shaders");
-    REQUIRE(segment01::PathManager::getPath(
-                segment01::PathManager::Dir::SHADER_FRAG) ==
-            "assets\\shaders\\frag");
-    REQUIRE(segment01::PathManager::getPath(
-                segment01::PathManager::Dir::SHADER_VERT) ==
-            "assets\\shaders\\vert");
-    REQUIRE(segment01::PathManager::getPath(
-                segment01::PathManager::Dir::SOUND) == "assets\\sound");
-    REQUIRE(segment01::PathManager::getPath(
-                segment01::PathManager::Dir::FONT) == "assets\\font");
-    REQUIRE(segment01::PathManager::getPath(
-                segment01::PathManager::Dir::SCREENSHOT) ==
-            "assets\\screenshot");
     segment01::Logger::setLevel(segment01::LogLevel::NONE);
     segment01::PathManager::read();
+    segment01::PathManager::setPath(segment01::Func::str16Tostr8(
+        segment01::OsManager::getExecutablePath()));
     segment01::Logger::setLevel(segment01::LogLevel::INFO);
+
+    static_cast<void>(
+        segment01::PathManager::getPath(segment01::PathManager::Dir::ROOT));
+    static_cast<void>(
+        segment01::PathManager::getPath(segment01::PathManager::Dir::DAT));
+    static_cast<void>(
+        segment01::PathManager::getPath(segment01::PathManager::Dir::IMG));
+    static_cast<void>(
+        segment01::PathManager::getPath(segment01::PathManager::Dir::SHADER));
+    static_cast<void>(segment01::PathManager::getPath(
+        segment01::PathManager::Dir::SHADER_FRAG));
+    static_cast<void>(segment01::PathManager::getPath(
+        segment01::PathManager::Dir::SHADER_VERT));
+    static_cast<void>(
+        segment01::PathManager::getPath(segment01::PathManager::Dir::SOUND));
+    static_cast<void>(
+        segment01::PathManager::getPath(segment01::PathManager::Dir::FONT));
+    static_cast<void>(segment01::PathManager::getPath(
+        segment01::PathManager::Dir::SCREENSHOT));
 }

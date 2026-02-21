@@ -17,17 +17,19 @@
 //
 ////////////////////////////////////////////////////////////
 
-#include "FontManager.hpp"
-#include "Func.hpp"
-#include "OsManager.hpp"
-#include "PathManager.hpp"
+#include "text/BlockClosingText.hpp"
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Fontmanager", "[fontmanager]")
+TEST_CASE("Blockclosingtext", "[blockclosingtext]")
 {
-    segment01::PathManager::setPath(segment01::Func::str16Tostr8(
-        segment01::OsManager::getExecutablePath()));
-    segment01::FontManager::initialize();
-    REQUIRE(segment01::FontManager::getFont("error") == nullptr);
-    REQUIRE(segment01::FontManager::getFont("LinBiolinum_RI.ttf") != nullptr);
+    const auto block1 = segment01::BlockClosingText();
+    REQUIRE(block1.getType() == segment01::NodeText::Type::BLOCKCLOSING);
+    segment01::BlockClosingText block2 = block1;
+    block2 = block1;
+    REQUIRE(block1.isEqual(block2));
+    REQUIRE(block1.getStr() == U"");
+    REQUIRE(block1.toStr() == U"</>");
+    REQUIRE(block1 == block2);
+    REQUIRE(!(block1 != block2));
+    block2.release();
 }
