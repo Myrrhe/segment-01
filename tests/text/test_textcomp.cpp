@@ -76,5 +76,6 @@ TEST_CASE("Textcomp", "[textcomp]")
         std::vector<const segment01::ChainText *>{&chain1},
         *segment01::FontManager::getFont("LinBiolinum_RI.ttf"),
         segment01::InfoText::DefaultSize);
-    segment01::Logger().info(text3.getLocalBounds());
+    static_cast<void>(text3.getLocalBounds());
+    static_cast<void>(text3.findCharacterPos(1));
 }
