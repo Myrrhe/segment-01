@@ -88,7 +88,7 @@ public:
 
     sf::Rect<float32_t> getGlobalBounds() const;
 
-    void setGeomtryNeedUpdate();
+    void setGeometryNeedUpdate();
 
 private:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;

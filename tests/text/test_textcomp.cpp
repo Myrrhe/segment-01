@@ -27,6 +27,7 @@
 TEST_CASE("Textcomp", "[textcomp]")
 {
     const auto text1 = segment01::TextComp();
+    static_cast<void>(text1.getLocalBounds());
     auto text2 = text1;
     text2 = text1;
     text2.setCharacterSize(segment01::InfoText::DefaultSize);
@@ -71,11 +72,14 @@ TEST_CASE("Textcomp", "[textcomp]")
     segment01::FontManager::initialize();
 
     const auto chain1 = segment01::ChainText(
-        UR"(<cSize=30></>alpha<cSize=30>beta</>gamma\<\\)");
-    const auto text3 = segment01::TextComp(
+        UR"(<cSize=30></>alpha<cSize=30>beta</>ga mma<style=15,thick=1>del ta</><cSize=30>eps ilon</>\<\\)");
+    auto text3 = segment01::TextComp(
         std::vector<const segment01::ChainText *>{&chain1},
         *segment01::FontManager::getFont("LinBiolinum_RI.ttf"),
         segment01::InfoText::DefaultSize);
-    static_cast<void>(text3.getLocalBounds());
+    static_cast<void>(text3.getGlobalBounds());
     static_cast<void>(text3.findCharacterPos(1));
+    text3.setGeometryNeedUpdate();
+    auto render1 = sf::RenderTexture();
+    render1.draw(text3);
 }

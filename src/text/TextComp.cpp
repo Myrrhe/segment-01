@@ -540,7 +540,7 @@ sf::Rect<float32_t> TextComp::getGlobalBounds() const
     return getTransform().transformRect(getLocalBounds());
 }
 
-void TextComp::setGeomtryNeedUpdate() { m_geometryNeedUpdate = true; }
+void TextComp::setGeometryNeedUpdate() { m_geometryNeedUpdate = true; }
 
 void TextComp::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
